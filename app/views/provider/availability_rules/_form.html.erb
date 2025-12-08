@@ -1,0 +1,19 @@
+<%= form_with(model: [:provider, service, exception], class: "mt-4") do |f| %>
+
+  <div class="mb-3">
+    <%= f.label :date, "Date", class: "form-label" %>
+    <%= f.date_field :date, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :start_time, "Début (optionnel)", class: "form-label" %>
+    <%= f.time_field :start_time, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :end_time, "Fin (optionnel)", class: "form-label" %>
+    <%= f.time_field :end_time, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+<% end %>

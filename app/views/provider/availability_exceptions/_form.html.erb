@@ -1,0 +1,21 @@
+<%= form_with(model: [:provider, service, rule], class: "mt-4") do |f| %>
+
+  <div class="mb-3">
+    <%= f.label :weekday, "Jour de la semaine", class: "form-label" %>
+    <%= f.select :weekday,
+      Date::DAYNAMES.each_with_index.map { |d, i| [d, i] },
+      {}, class: "form-select" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :start_time, "Heure de début", class: "form-label" %>
+    <%= f.time_field :start_time, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :end_time, "Heure de fin", class: "form-label" %>
+    <%= f.time_field :end_time, class: "form-control" %>
+  </div>
+
+  <%= f.submit "Enregistrer", class: "btn btn-primary" %>
+<% end %>

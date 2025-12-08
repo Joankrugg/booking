@@ -1,0 +1,30 @@
+<h2 class="mb-3">Zones d'intervention pour <%= @service.name %></h2>
+
+<%= link_to "Ajouter une zone", new_provider_service_service_area_path(@service), class: "btn btn-primary mb-3" %>
+
+<table class="table table-bordered">
+  <thead>
+    <tr>
+      <th>Adresse</th>
+      <th>Rayon (km)</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @areas.each do |area| %>
+      <tr>
+        <td><%= area.address %></td>
+        <td><%= area.radius_km %></td>
+        <td>
+          <%= link_to "Modifier", edit_provider_service_service_area_path(@service, area), class: "btn btn-sm btn-secondary" %>
+          <%= link_to "Supprimer", provider_service_service_area_path(@service, area),
+            data: { turbo_method: :delete, turbo_confirm: "Supprimer ?" },
+            class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "Retour aux prestations", provider_services_path, class: "btn btn-link" %>

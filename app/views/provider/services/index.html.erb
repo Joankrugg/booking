@@ -1,0 +1,33 @@
+<h1 class="mb-4">Mes prestations</h1>
+
+<%= link_to "Nouvelle prestation", new_provider_service_path, class: "btn btn-primary mb-3" %>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Nom</th>
+      <th>Type</th>
+      <th>Durée</th>
+      <th>Prix (€)</th>
+      <th></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @services.each do |service| %>
+      <tr>
+        <td><%= service.name %></td>
+        <td><%= service.service_type.name %></td>
+        <td><%= service.duration_minutes %> min</td>
+        <td><%= service.price_euros %></td>
+        <td>
+          <%= link_to "Modifier", edit_provider_service_path(service), class: "btn btn-sm btn-secondary" %>
+          <%= link_to "Supprimer",
+                      provider_service_path(service),
+                      data: { turbo_method: :delete, turbo_confirm: "Supprimer ?" },
+                      class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

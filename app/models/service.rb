@@ -1,0 +1,12 @@
+class Service < ApplicationRecord
+  belongs_to :user
+  belongs_to :service_type
+
+  has_many :service_areas, dependent: :destroy
+  has_many :availability_rules, dependent: :destroy
+  has_many :availability_exceptions, dependent: :destroy
+
+  validates :name, presence: true
+  validates :price_euros, numericality: true
+  validates :duration_minutes, numericality: true
+end

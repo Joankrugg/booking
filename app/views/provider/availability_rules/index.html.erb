@@ -1,0 +1,39 @@
+<h2 class="mb-4">Disponibilités récurrentes — <%= @service.name %></h2>
+
+<%= link_to "➕ Ajouter une plage", 
+    new_provider_service_availability_rule_path(@service), 
+    class: "btn btn-primary mb-3" %>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>Jour</th>
+      <th>Début</th>
+      <th>Fin</th>
+      <th style="width: 180px"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @rules.each do |rule| %>
+      <tr>
+        <td><%= Date::DAYNAMES[rule.weekday] %></td>
+        <td><%= rule.start_time.strftime("%H:%M") %></td>
+        <td><%= rule.end_time.strftime("%H:%M") %></td>
+
+        <td>
+          <%= link_to "Modifier", 
+              edit_provider_service_availability_rule_path(@service, rule),
+              class: "btn btn-sm btn-secondary me-2" %>
+
+          <%= link_to "Supprimer",
+              provider_service_availability_rule_path(@service, rule),
+              data: { turbo_method: :delete, turbo_confirm: "Supprimer cette plage ?" },
+              class: "btn btn-sm btn-danger" %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= link_to "← Retour au service", provider_services_path, class: "btn btn-link" %>
