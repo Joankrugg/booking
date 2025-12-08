@@ -1,7 +1,15 @@
-<h1 class="mb-4">Bienvenue dans votre espace prestataire</h1>
+<h1 class="mb-4">Bienvenue <%= current_user.email %></h1>
 
-<p class="lead">
-  Vous avez actuellement <strong><%= @services_count %></strong> prestations actives.
-</p>
+<div class="d-flex justify-content-between mb-3">
+  <h2>Vos services</h2>
+  <%= link_to "➕ Nouveau service", new_provider_service_path, class: "btn btn-primary" %>
+</div>
 
-<%= link_to "Gérer mes prestations", provider_services_path, class: "btn btn-primary" %>
+<ul class="list-group">
+  <% @services.each do |service| %>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <%= service.name %>
+      <%= link_to "Gérer", edit_provider_service_path(service), class: "btn btn-sm btn-outline-secondary" %>
+    </li>
+  <% end %>
+</ul>

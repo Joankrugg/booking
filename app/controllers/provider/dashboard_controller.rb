@@ -1,7 +1,6 @@
-module Provider
-  class DashboardController < BaseController
-    def index
-      @services_count = current_user.services.count
-    end
+class Provider::DashboardController < Provider::BaseController
+  def index
+    @services = current_user.services
   end
 end
+

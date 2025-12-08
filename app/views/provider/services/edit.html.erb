@@ -1,3 +1,28 @@
-<h1>mettre à jour prestation</h1>
+<h1 class="h3 mb-4">Modifier le service</h1>
 
-<%= render "form", service: @service %>
+<%= render "form" %>
+
+<hr>
+
+<h3 class="mt-4">Gestion avancée</h3>
+
+<div class="list-group">
+
+  <a href="<%= provider_service_service_areas_path(@service) %>" 
+     class="list-group-item list-group-item-action">
+    📍 Zones de prestation
+  </a>
+
+  <a href="<%= provider_service_availability_rules_path(@service) %>" 
+     class="list-group-item list-group-item-action">
+    🗓️ Règles de disponibilité
+  </a>
+
+  <a href="<%= provider_service_availability_exceptions_path(@service) %>" 
+     class="list-group-item list-group-item-action">
+    ⛔ Exceptions de calendrier
+  </a>
+
+</div>
+
+<%= link_to "← Retour à la liste", provider_services_path, class: "btn btn-link mb-3" %>

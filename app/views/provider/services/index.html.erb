@@ -1,33 +1,33 @@
-<h1 class="mb-4">Mes prestations</h1>
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3">Vos services</h1>
+  <%= link_to "➕ Nouveau service", new_provider_service_path, class: "btn btn-primary" %>
+</div>
 
-<%= link_to "Nouvelle prestation", new_provider_service_path, class: "btn btn-primary mb-3" %>
-
-<table class="table table-bordered table-striped">
-  <thead>
-    <tr>
-      <th>Nom</th>
-      <th>Type</th>
-      <th>Durée</th>
-      <th>Prix (€)</th>
-      <th></th>
-    </tr>
-  </thead>
-
-  <tbody>
+<% if @services.empty? %>
+  <div class="alert alert-info">
+    Vous n'avez encore créé aucun service.
+  </div>
+<% else %>
+  <div class="list-group">
     <% @services.each do |service| %>
-      <tr>
-        <td><%= service.name %></td>
-        <td><%= service.service_type.name %></td>
-        <td><%= service.duration_minutes %> min</td>
-        <td><%= service.price_euros %></td>
-        <td>
-          <%= link_to "Modifier", edit_provider_service_path(service), class: "btn btn-sm btn-secondary" %>
-          <%= link_to "Supprimer",
-                      provider_service_path(service),
-                      data: { turbo_method: :delete, turbo_confirm: "Supprimer ?" },
-                      class: "btn btn-sm btn-danger" %>
-        </td>
-      </tr>
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+
+        <div>
+          <strong><%= service.name %></strong><br>
+          <small class="text-muted">
+            <%= service.duration_minutes %> min – <%= service.price_euros %> €
+          </small>
+        </div>
+
+        <div>
+          <%= link_to "Gérer", edit_provider_service_path(service), class: "btn btn-sm btn-outline-secondary" %>
+          <%= link_to "Supprimer", provider_service_path(service),
+                method: :delete,
+                data: { confirm: "Supprimer ce service ?" },
+                class: "btn btn-sm btn-danger ms-2" %>
+        </div>
+
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
+<% end %>
