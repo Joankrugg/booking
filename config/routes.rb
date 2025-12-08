@@ -1,24 +1,25 @@
 Rails.application.routes.draw do
-  devise_for :users
+  devise_for :users, controllers: {
+    sessions: "users/sessions",
+    registrations: "users/registrations",
+    passwords: "users/passwords"
+  }
 
-  # PROVIDER namespace
+  # PUBLIC ROOT
+  root "home#index"
+
+  # PROVIDER ROOT (protégé)
   namespace :provider do
-    root "dashboard#index", as: :dashboard
-
+    root "dashboard#index"
     resources :services do
-      resources :service_areas, only: [:index, :new, :create, :destroy]
-      resources :availability_rules, only: [:index, :new, :create, :destroy]
-      resources :availability_exceptions, only: [:index, :new, :create, :destroy]
+      resources :service_areas
+      resources :availability_rules
+      resources :availability_exceptions
     end
   end
 
-  # PUBLIC
-  resources :services, only: [:show] do
+  # PUBLIC SERVICES
+  resources :services, only: [:index, :show] do
     get :availability
   end
-
-  resources :bookings, only: [:create, :show]
-
-
-  root "home#index"
 end

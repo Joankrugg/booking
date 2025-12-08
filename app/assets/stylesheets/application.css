@@ -1,10 +1,23 @@
-/*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
- */
+.auth-dark-wrapper {
+  min-height: 100vh;
+  background: #111;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px;
+}
+
+.auth-dark-card {
+  background: #1a1a1a;
+  padding: 40px 35px;
+  border-radius: 20px;
+  width: 400px;
+}
+
+.auth-dark-input {
+  background: #222;
+  border: none;
+  height: 48px;
+  border-radius: 10px;
+  color: white;
+}

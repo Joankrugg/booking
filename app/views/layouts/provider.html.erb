@@ -14,13 +14,14 @@
 
     <div>
       <%= link_to "Mes services", provider_services_path, class: "btn btn-outline-light me-2" %>
-      <%= link_to "Déconnexion", destroy_user_session_path, 
-          method: :delete, class: "btn btn-danger" %>
+      <%= button_to "Se déconnecter",
+              destroy_user_session_path,
+              method: :delete, class: 'btn btn-danger' %>
     </div>
   </div>
 </nav>
 
-<div class="container py-4">
+<div class="container py-4"> 
   <%= yield %>
 </div>
 
