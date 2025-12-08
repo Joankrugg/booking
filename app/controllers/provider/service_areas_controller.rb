@@ -47,3 +47,5 @@ class Provider::ServiceAreasController < Provider::BaseController
     params.require(:service_area).permit(:address, :radius_km)
   end
 end
+
+

@@ -17,5 +17,8 @@ Rails.application.routes.draw do
     get :availability
   end
 
+  resources :bookings, only: [:create, :show]
+
+
   root "home#index"
 end

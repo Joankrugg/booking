@@ -1,19 +1,28 @@
-<%= form_with(model: [:provider, service, exception], class: "mt-4") do |f| %>
+<%= form_with(model: [:provider, @service, @rule], class: "card p-4 shadow-sm") do |f| %>
 
   <div class="mb-3">
-    <%= f.label :date, "Date", class: "form-label" %>
-    <%= f.date_field :date, class: "form-control" %>
+    <%= f.label :weekday, "Jour de la semaine", class: "form-label" %>
+    <%= f.select :weekday,
+          Date::DAYNAMES.each_with_index.map { |name, i| [name, i] },
+          {},
+          class: "form-select",
+          required: true %>
   </div>
 
-  <div class="mb-3">
-    <%= f.label :start_time, "Début (optionnel)", class: "form-label" %>
-    <%= f.time_field :start_time, class: "form-control" %>
+  <div class="row">
+    <div class="col-md-6 mb-3">
+      <%= f.label :start_time, "Heure de début", class: "form-label" %>
+      <%= f.time_field :start_time, class: "form-control", required: true %>
+    </div>
+
+    <div class="col-md-6 mb-3">
+      <%= f.label :end_time, "Heure de fin", class: "form-label" %>
+      <%= f.time_field :end_time, class: "form-control", required: true %>
+    </div>
   </div>
 
-  <div class="mb-3">
-    <%= f.label :end_time, "Fin (optionnel)", class: "form-label" %>
-    <%= f.time_field :end_time, class: "form-control" %>
+  <div class="d-flex justify-content-end mt-3">
+    <%= f.submit "Enregistrer", class: "btn btn-primary" %>
   </div>
 
-  <%= f.submit "Enregistrer", class: "btn btn-primary" %>
 <% end %>

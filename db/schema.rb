@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_07_095409) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_08_114706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -32,6 +32,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_095409) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["service_id"], name: "index_availability_rules_on_service_id"
+  end
+
+  create_table "bookings", force: :cascade do |t|
+    t.bigint "service_id", null: false
+    t.datetime "start_time"
+    t.datetime "end_time"
+    t.string "customer_name"
+    t.string "customer_email"
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["service_id"], name: "index_bookings_on_service_id"
   end
 
   create_table "service_areas", force: :cascade do |t|
@@ -77,6 +89,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_07_095409) do
 
   add_foreign_key "availability_exceptions", "services"
   add_foreign_key "availability_rules", "services"
+  add_foreign_key "bookings", "services"
   add_foreign_key "service_areas", "services"
   add_foreign_key "services", "service_types"
   add_foreign_key "services", "users"

@@ -1,5 +1,11 @@
-<h2>Ajouter une plage de disponibilité</h2>
+<h1 class="h4 mb-3">
+  Ajouter une exception pour <%= @service.name %>
+</h1>
 
-<%= render "form", rule: @rule, service: @service %>
+<%= render "form" %>
 
-<%= link_to "← Retour", provider_service_availability_rules_path(@service), class: "btn btn-link mt-3" %>
+<div class="mt-3">
+  <%= link_to "← Retour aux exceptions",
+      provider_service_availability_exceptions_path(@service),
+      class: "btn btn-link" %>
+</div>

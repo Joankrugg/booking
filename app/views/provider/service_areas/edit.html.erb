@@ -1,3 +1,11 @@
-<h2>modifier une zone pour <%= @service.name %></h2>
+<h1 class="h4 mb-3">
+  Modifier une zone pour <%= @service.name %>
+</h1>
 
-<%= render "form", area: @area, service: @service %>
+<%= render "form" %>
+
+<div class="mt-3">
+  <%= link_to "← Retour aux zones",
+      provider_service_service_areas_path(@service),
+      class: "btn btn-link" %>
+</div>
