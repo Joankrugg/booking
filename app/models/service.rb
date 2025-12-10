@@ -9,4 +9,6 @@ class Service < ApplicationRecord
   validates :name, presence: true
   validates :price_euros, numericality: true
   validates :duration_minutes, numericality: true
+
+  has_one_attached :photo 
 end

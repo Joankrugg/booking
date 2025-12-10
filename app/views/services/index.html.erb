@@ -5,8 +5,16 @@
   <div class="row g-4">
 
     <% @services.each do |service| %>
+
       <div class="col-md-4 col-sm-6">
         <div class="card service-card h-100 shadow-sm">
+          <% if service.photo.attached? %>
+            <%= image_tag service.photo, height: 180, width: 320, crop: :fill, class: "card-img-top" %>
+          <% else %>
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height:180px; border-radius:12px;">
+              <span class="text-muted">Aucune image</span>
+            </div>
+          <% end %>
 
           <div class="card-body">
             <h5 class="fw-bold mb-1 text-primary"><%= service.name %></h5>

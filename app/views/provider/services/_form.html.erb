@@ -10,6 +10,19 @@
     <%= f.text_area :description, class: "form-control", rows: 3 %>
   </div>
 
+  <div class="mb-3">
+    <%= f.label :photo, "Photo de la prestation", class: "form-label fw-semibold" %>
+    <%= f.file_field :photo, class: "form-control" %>
+
+    <% if @service.photo.attached? %>
+      <div class="mt-3">
+        <p class="fw-semibold">Aperçu :</p>
+        <%= image_tag @service.photo, height: 180, width: 320, crop: :fill %>
+      </div>
+    <% end %>
+  </div>
+
+
   <div class="row">
     <div class="col-md-6 mb-3">
       <%= f.label :price_euros, "Prix (€)" %>

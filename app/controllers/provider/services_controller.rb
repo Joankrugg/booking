@@ -45,7 +45,8 @@ class Provider::ServicesController < Provider::BaseController
       :description,
       :price_euros,
       :duration_minutes,
-      :service_type_id
+      :service_type_id,
+      :photo
     )
   end
 end
