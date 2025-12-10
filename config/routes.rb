@@ -20,6 +20,10 @@ Rails.application.routes.draw do
 
   # PUBLIC SERVICES
   resources :services, only: [:index, :show] do
-    get :availability
+    get :availability, on: :member
+    resources :bookings, only: [:new, :create]
   end
+
+  resources :bookings, only: [:show]
+  
 end

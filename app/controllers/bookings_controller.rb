@@ -1,13 +1,22 @@
-# app/controllers/bookings_controller.rb
 class BookingsController < ApplicationController
+
+  def new
+    @service = Service.find(params[:service_id])
+
+    @booking = Booking.new(
+      service_id: @service.id,
+      start_time: params[:start_time],
+      end_time: params[:end_time]
+    )
+  end
+
   def create
     @booking = Booking.new(booking_params)
 
     if @booking.save
       redirect_to booking_path(@booking), notice: "Réservation enregistrée."
     else
-      # on pourrait faire mieux, mais pour MVP :
-      redirect_back fallback_location: root_path, alert: "Impossible de créer la réservation."
+      redirect_back fallback_location: service_path(params[:service_id]), alert: "Impossible de créer la réservation."
     end
   end
 

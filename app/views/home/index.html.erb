@@ -1,21 +1,8 @@
-<div class="container py-5">
-  <div class="row justify-content-center mt-5">
-    <div class="col-md-8 text-center">
+<div class="container py-5 text-center">
+  <h1 class="fw-bold mb-3">Réserver un groupe, un DJ ou une prestation</h1>
+  <p class="text-muted mb-4">
+    Choisissez une prestation, une date et réservez instantanément.
+  </p>
 
-      <h1 class="display-5 fw-bold mb-3">
-        Réservez vos prestations. Simplement.
-      </h1>
-
-      <p class="text-muted mb-4">
-        Une plateforme pour réserver des groupes de musique, DJs et prestations variées.
-        Les artistes gèrent leurs disponibilités, les clients réservent en quelques clics.
-      </p>
-
-      <div class="d-flex justify-content-center gap-3">
-        <%= link_to "Voir un service", services_path, class: "btn btn-outline-primary btn-lg" %>
-        <%= link_to "Espace prestataire", new_user_session_path, class: "btn btn-dark btn-lg" %>
-      </div>
-
-    </div>
-  </div>
+  <a class="btn btn-primary btn-lg" href="/services">Voir les prestations</a>
 </div>

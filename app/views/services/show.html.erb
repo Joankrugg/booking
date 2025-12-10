@@ -1,62 +1,64 @@
-<!-- app/views/services/show.html.erb -->
-<div class="row">
-  <div class="col-md-6 mb-4">
-    <h1 class="h3"><%= @service.name %></h1>
-    <p><%= @service.description %></p>
+<div class="container py-5">
 
-    <p class="fw-bold">
-      <%= @service.price_euros %> € · <%= @service.duration_minutes %> minutes
-    </p>
+  <div class="row mb-4">
+    <div class="col-md-7">
+      <h1 class="fw-bold text-primary"><%= @service.name %></h1>
+      <p class="text-muted fs-5"><%= @service.description %></p>
+
+      <p class="fw-bold fs-4 text-dark">
+        <%= @service.price_euros %> € 
+        <span class="text-muted fs-6">
+          • <%= @service.duration_minutes %> min
+        </span>
+      </p>
+    </div>
   </div>
 
-  <div class="col-md-6 mb-4">
-    <h2 class="h4 mb-3">Réserver un créneau</h2>
+  <hr class="my-4">
 
-    <!-- Sélecteur de date -->
-    <div class="mb-3">
-      <label for="booking-date" class="form-label">Date</label>
-      <input type="date" id="booking-date" class="form-control">
+  <div class="row">
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">Choisir une date</label>
+      <input type="date" id="booking-date" class="form-control shadow-sm">
     </div>
 
-    <!-- Créneaux disponibles -->
-    <div class="mb-3">
-      <label class="form-label">Créneaux disponibles</label>
-      <div id="slots-container">
-        <div class="text-muted">Choisissez une date pour voir les créneaux.</div>
-      </div>
+    <div class="col-md-8">
+      <h4 class="fw-bold mb-3">Créneaux disponibles</h4>
+      <div id="slots-container" class="p-2"></div>
     </div>
-
-    <!-- Formulaire de réservation -->
-    <h3 class="h5 mt-4">Vos informations</h3>
-
-    <%= form_with url: bookings_path, method: :post, local: true, class: "card p-3" do |f| %>
-      <%= f.hidden_field :service_id, value: @service.id %>
-      <%= f.hidden_field :start_time, id: "booking_start_time" %>
-      <%= f.hidden_field :end_time, id: "booking_end_time" %>
-
-      <div class="mb-3">
-        <%= f.label :customer_name, "Nom", class: "form-label" %>
-        <%= f.text_field :customer_name, class: "form-control", required: true %>
-      </div>
-
-      <div class="mb-3">
-        <%= f.label :customer_email, "Email", class: "form-label" %>
-        <%= f.email_field :customer_email, class: "form-control", required: true %>
-      </div>
-
-      <div class="mb-2" id="selected-slot-summary" style="display:none;">
-        <small class="text-success">
-          Créneau sélectionné :
-          <span id="selected-slot-label"></span>
-        </small>
-      </div>
-
-      <div class="d-grid">
-        <%= f.submit "Confirmer la réservation", class: "btn btn-primary" %>
-      </div>
-    <% end %>
   </div>
+
+  <hr class="my-4">
+
+  <h3 class="fw-bold mb-3">Vos informations</h3>
+  <%= form_with url: service_bookings_path(@service), method: :post, local: true, class: "card p-3 shadow-sm" do |f| %>
+
+    <%= f.hidden_field :service_id, value: @service.id %>
+    <%= f.hidden_field :start_time, id: "booking_start_time" %>
+    <%= f.hidden_field :end_time, id: "booking_end_time" %>
+
+    <div class="mb-3">
+      <%= f.label :customer_name, "Nom complet", class: "form-label fw-semibold" %>
+      <%= f.text_field :customer_name, class: "form-control shadow-sm", required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :customer_email, "Email", class: "form-label fw-semibold" %>
+      <%= f.email_field :customer_email, class: "form-control shadow-sm", required: true %>
+    </div>
+
+    <div class="mb-3 text-success fw-semibold" id="selected-slot-summary" style="display:none;">
+      Créneau sélectionné :
+      <span id="selected-slot-label"></span>
+    </div>
+
+    <div class="d-grid">
+      <%= f.submit "Réserver ce créneau", class: "btn btn-primary btn-lg" %>
+    </div>
+
+  <% end %>
 </div>
+
 
 <script>
   (function() {
