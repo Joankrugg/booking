@@ -13,6 +13,8 @@ class Provider::ServicesController < Provider::BaseController
       redirect_to provider_services_path, notice: "Prestation créée avec succès."
     else
       render :new, status: :unprocessable_entity
+      Rails.logger.info "VALID? #{@service.valid?}"
+      Rails.logger.info @service.errors.full_messages.inspect
     end
   end
 
