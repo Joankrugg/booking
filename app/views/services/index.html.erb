@@ -23,11 +23,8 @@
             </p>
 
             <!-- Flatpickr date -->
-            <div class="mb-2">
-              <label class="form-label small">Choisir une date :</label>
-              <input type="text"
-                     class="form-control form-control-sm public-date-picker"
-                     placeholder="Sélectionner une date">
+            <div data-controller="flatpickr">
+              <input type="text" data-flatpickr-target="input" class="form-control public-date-picker">
             </div>
 
             <!-- Slots results -->
@@ -56,17 +53,24 @@
     box-shadow: 0 6px 20px rgba(0,0,0,0.12);
   }
 </style>
-<!-- Flatpickr CDN -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("turbo:load", initFlatpickr);
+document.addEventListener("turbo:render", initFlatpickr);
 
+function initFlatpickr() {
   document.querySelectorAll(".service-card").forEach(function (card) {
+
+    // éviter double init
+    if (card.classList.contains("fp-loaded")) return;
+    card.classList.add("fp-loaded");
+
     const serviceId   = card.dataset.serviceId;
     const dateInput   = card.querySelector(".public-date-picker");
     const slotsBox    = card.querySelector(".public-slots");
+
+    if (!dateInput) return;
 
     flatpickr(dateInput, {
       dateFormat: "Y-m-d",
@@ -77,45 +81,45 @@ document.addEventListener("DOMContentLoaded", function () {
       }
     });
   });
+}
 
-  function loadSlots(serviceId, date, container) {
-    container.innerHTML = "<span class='text-muted'>Chargement...</span>";
 
-    fetch(`/services/${serviceId}/availability?date=${encodeURIComponent(date)}`)
-      .then(res => res.json())
-      .then(data => {
-        renderSlots(data.slots || [], date, serviceId, container);
-      })
-      .catch(() => {
-        container.innerHTML = "<span class='text-danger'>Erreur lors du chargement.</span>";
-      });
-  }
+function loadSlots(serviceId, date, container) {
+  container.innerHTML = "<span class='text-muted'>Chargement...</span>";
 
-  function renderSlots(slots, date, serviceId, container) {
-    if (slots.length === 0) {
-      container.innerHTML = "<span class='text-muted'>Aucun créneau ce jour-là.</span>";
-      return;
-    }
-
-    let html = "<div class='d-flex flex-wrap gap-1'>";
-
-    slots.forEach(slot => {
-      const label = new Date(slot.start).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-
-      html += `
-        <a href="/services/${serviceId}?date=${date}&start=${slot.start}"
-           class="btn btn-sm btn-outline-primary">
-           ${label}
-        </a>
-      `;
+  fetch(`/services/${serviceId}/availability?date=${encodeURIComponent(date)}`)
+    .then(res => res.json())
+    .then(data => {
+      renderSlots(data.slots || [], date, serviceId, container);
+    })
+    .catch(() => {
+      container.innerHTML = "<span class='text-danger'>Erreur lors du chargement.</span>";
     });
+}
 
-    html += "</div>";
-
-    container.innerHTML = html;
+function renderSlots(slots, date, serviceId, container) {
+  if (slots.length === 0) {
+    container.innerHTML = "<span class='text-muted'>Aucun créneau ce jour-là.</span>";
+    return;
   }
 
-});
+  let html = "<div class='d-flex flex-wrap gap-1'>";
+
+  slots.forEach(slot => {
+    const label = new Date(slot.start).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+
+    html += `
+      <a href="/services/${serviceId}?date=${date}&start=${slot.start}"
+         class="btn btn-sm btn-outline-primary">
+         ${label}
+      </a>
+    `;
+  });
+
+  html += "</div>";
+
+  container.innerHTML = html;
+}
 </script>
 
 
