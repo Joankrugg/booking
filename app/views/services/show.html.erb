@@ -34,7 +34,8 @@
   <hr class="my-4">
 
   <h3 class="fw-bold mb-3">Vos informations</h3>
-  <%= form_with url: service_bookings_path(@service), method: :post, local: true, class: "card p-3 shadow-sm" do |f| %>
+  <%= form_with model: [@service, Booking.new], local: true do |f| %>
+
 
     <%= f.hidden_field :service_id, value: @service.id %>
     <%= f.hidden_field :start_time, id: "booking_start_time" %>
@@ -57,6 +58,16 @@
 
     <div class="d-grid">
       <%= f.submit "Réserver ce créneau", class: "btn btn-primary btn-lg" %>
+      <% if @booking&.errors&.any? %>
+        <div class="alert alert-danger mt-3">
+          <strong>Impossible de valider :</strong>
+          <ul class="mb-0">
+            <% @booking.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
     </div>
 
   <% end %>
@@ -64,85 +75,109 @@
 
 
 <script>
-  (function() {
-    const serviceId = <%= @service.id %>;
-    const availabilityUrlTemplate = "/services/" + serviceId + "/availability?date=";
+(function() {
+  const serviceId = <%= @service.id %>;
 
-    const dateInput = document.getElementById("booking-date");
-    const slotsContainer = document.getElementById("slots-container");
-    const startField = document.getElementById("booking_start_time");
-    const endField = document.getElementById("booking_end_time");
-    const summaryBlock = document.getElementById("selected-slot-summary");
-    const summaryLabel = document.getElementById("selected-slot-label");
+  const prefillDate  = "<%= @prefill_date || '' %>";
+  const prefillStart = "<%= @prefill_start || '' %>";
 
-    // Préselectionne la date du jour
+  const availabilityUrlTemplate = "/services/" + serviceId + "/availability?date=";
+
+  const dateInput      = document.getElementById("booking-date");
+  const slotsContainer = document.getElementById("slots-container");
+  const startField     = document.getElementById("booking_start_time");
+  const endField       = document.getElementById("booking_end_time");
+  const summaryBlock   = document.getElementById("selected-slot-summary");
+  const summaryLabel   = document.getElementById("selected-slot-label");
+
+  // ----------------------------
+  // 1) Préselection de la DATE
+  // ----------------------------
+  if (prefillDate !== "") {
+    dateInput.value = prefillDate;
+  } else {
     const today = new Date();
     dateInput.value = today.toISOString().slice(0, 10);
+  }
 
-    dateInput.addEventListener("change", function() {
-      loadSlots(this.value);
-    });
+  // Charger les slots pour la date courante
+  loadSlots(dateInput.value);
 
-    // Charger les slots pour la date initiale
-    loadSlots(dateInput.value);
+  dateInput.addEventListener("change", function() {
+    loadSlots(this.value);
+  });
 
-    function loadSlots(dateStr) {
-      slotsContainer.innerHTML = "<div class='text-muted'>Chargement...</div>";
+  // ----------------------------
+  // 2) Charger & rendre les créneaux
+  // ----------------------------
+  function loadSlots(dateStr) {
+    slotsContainer.innerHTML = "<div class='text-muted'>Chargement...</div>";
 
-      fetch(availabilityUrlTemplate + encodeURIComponent(dateStr))
-        .then(response => response.json())
-        .then(data => {
-          renderSlots(data.slots, dateStr);
-        })
-        .catch(() => {
-          slotsContainer.innerHTML = "<div class='text-danger'>Erreur lors du chargement des créneaux.</div>";
-        });
+    fetch(availabilityUrlTemplate + encodeURIComponent(dateStr))
+      .then(response => response.json())
+      .then(data => {
+        renderSlots(data.slots || [], dateStr);
+      })
+      .catch(() => {
+        slotsContainer.innerHTML = "<div class='text-danger'>Erreur lors du chargement des créneaux.</div>";
+      });
+  }
+
+  function renderSlots(slots, dateStr) {
+    if (!slots || slots.length === 0) {
+      slotsContainer.innerHTML = "<div class='text-muted'>Aucun créneau disponible pour cette date.</div>";
+      return;
     }
 
-    function renderSlots(slots, dateStr) {
-      if (!slots || slots.length === 0) {
-        slotsContainer.innerHTML = "<div class='text-muted'>Aucun créneau disponible pour cette date.</div>";
-        return;
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex flex-wrap gap-2";
+
+    slots.forEach(slot => {
+      const start = new Date(slot.start);
+      const end   = new Date(slot.end);
+      const label = formatTime(start) + " - " + formatTime(end);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-outline-primary btn-sm";
+      btn.textContent = label;
+
+      // ----------------------------
+      // 3) AUTO-SÉLECTION si params[:start]
+      // ----------------------------
+      if (prefillStart && slot.start === prefillStart) {
+        btn.classList.add("active");
+
+        startField.value = slot.start;
+        endField.value   = slot.end;
+
+        summaryLabel.textContent = `${dateStr} · ${label}`;
+        summaryBlock.style.display = "block";
       }
 
-      const wrapper = document.createElement("div");
-      wrapper.className = "d-flex flex-wrap gap-2";
+      btn.addEventListener("click", () => {
+        Array.from(wrapper.children).forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
 
-      slots.forEach(slot => {
-        const start = new Date(slot.start);
-        const end   = new Date(slot.end);
+        startField.value = slot.start;
+        endField.value   = slot.end;
 
-        const label = formatTime(start) + " - " + formatTime(end);
-
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "btn btn-outline-primary btn-sm";
-        btn.textContent = label;
-
-        btn.addEventListener("click", () => {
-          // maj champs hidden
-          startField.value = slot.start;
-          endField.value = slot.end;
-
-          // feedback visuel
-          Array.from(wrapper.children).forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-
-          summaryLabel.textContent = dateStr + " · " + label;
-          summaryBlock.style.display = "block";
-        });
-
-        wrapper.appendChild(btn);
+        summaryLabel.textContent = dateStr + " · " + label;
+        summaryBlock.style.display = "block";
       });
 
-      slotsContainer.innerHTML = "";
-      slotsContainer.appendChild(wrapper);
-    }
+      wrapper.appendChild(btn);
+    });
 
-    function formatTime(date) {
-      const h = String(date.getHours()).padStart(2, "0");
-      const m = String(date.getMinutes()).padStart(2, "0");
-      return h + ":" + m;
-    }
-  })();
+    slotsContainer.innerHTML = "";
+    slotsContainer.appendChild(wrapper);
+  }
+
+  function formatTime(date) {
+    const h = String(date.getHours()).padStart(2, "0");
+    const m = String(date.getMinutes()).padStart(2, "0");
+    return h + ":" + m;
+  }
+})();
 </script>
+

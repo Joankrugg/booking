@@ -3,8 +3,12 @@ class ServicesController < ApplicationController
   def index
     @services = Service.all  
   end
+
   def show
     @service = Service.find(params[:id])
+
+    @prefill_date  = params[:date]
+    @prefill_start = params[:start]
   end
 
   # GET /services/:id/availability?date=2025-12-10
