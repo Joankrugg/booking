@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   }
 
   # PUBLIC ROOT
-  root "home#index"
+  root "calendar#index"
+  get "/calendar", to: "calendar#index"
 
   # PROVIDER ROOT (protégé)
   namespace :provider do
@@ -21,9 +22,15 @@ Rails.application.routes.draw do
   # PUBLIC SERVICES
   resources :services, only: [:index, :show] do
     get :availability, on: :member
-    resources :bookings, only: [:new, :create]
-  end
 
+    resources :bookings, only: [:new, :create] do
+      member do
+        get :success
+        get :cancel
+      end
+    end
+  end
   resources :bookings, only: [:show]
-  
+  post "/webhooks/stripe", to: "webhooks#stripe"
+ 
 end

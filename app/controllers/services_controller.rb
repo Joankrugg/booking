@@ -9,7 +9,14 @@ class ServicesController < ApplicationController
 
     @prefill_date  = params[:date]
     @prefill_start = params[:start]
+
+    @booking = Booking.new(
+      service: @service,
+      start_time: @prefill_start,
+      amount_cents: @service.price_euros
+    )
   end
+
 
   # GET /services/:id/availability?date=2025-12-10
   def availability
@@ -29,5 +36,15 @@ class ServicesController < ApplicationController
       }
     }
   end
+  def success
+    @service = Service.find(params[:service_id])
+    @booking = @service.bookings.find(params[:id])
+  end
+
+  def cancel
+    @service = Service.find(params[:service_id])
+    @booking = @service.bookings.find(params[:id])
+  end
+
 end
 

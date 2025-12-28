@@ -2,22 +2,36 @@ class BookingsController < ApplicationController
 
   def new
     @service = Service.find(params[:service_id])
-    @booking =  @service.bookings.new
+
+    @booking = @service.bookings.new(
+      start_time: params[:start_time],
+      end_time:   params[:end_time]
+    )
   end
 
   def create
-    @service = Service.find(params[:service_id])  # ← indispensable
+    @service = Service.find(params[:service_id])
+    @booking = @service.bookings.new(booking_params)
 
-    @booking = Booking.new(booking_params)
+    @booking.amount_cents = @service.price_euros * 100
+    @booking.status = "pending"
 
     if @booking.save
-      redirect_to booking_path(@booking), notice: "Réservation enregistrée."
+      redirect_to success_service_booking_path(@service, @booking)
     else
-      flash.now[:alert] = "Merci de compléter les informations."
-      render "services/show", status: :unprocessable_entity
+      render :new, status: :unprocessable_entity
     end
   end
 
+  def success
+    @booking = Booking.find(params[:id])
+  end
+
+  def cancel
+    @booking = Booking.find(params[:id])
+    @booking.update(status: "cancelled")
+    redirect_to root_path
+  end
 
 
   def show

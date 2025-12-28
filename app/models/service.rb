@@ -5,6 +5,7 @@ class Service < ApplicationRecord
   has_many :service_areas, dependent: :destroy
   has_many :availability_rules, dependent: :destroy
   has_many :availability_exceptions, dependent: :destroy
+  has_many :bookings, dependent: :destroy
 
   validates :name, presence: true
   validates :price_euros, numericality: true

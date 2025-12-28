@@ -1,0 +1,69 @@
+<div class="calendar-page">
+
+  <div class="calendar-container">
+    <!-- CALENDRIER -->
+    <div class="calendar-header">
+	  <%= link_to "‹",
+	        calendar_path(date: @date.prev_month.beginning_of_month),
+	        class: "month-nav" %>
+
+	  <strong>
+	    <%= @date.strftime("%B %Y") %>
+	  </strong>
+
+	  <%= link_to "›",
+	        calendar_path(date: @date.next_month.beginning_of_month),
+	        class: "month-nav" %>
+	</div>
+    <aside class="calendar-month">
+      <h2><%= @date.strftime("%B %Y") %></h2>
+
+      <div class="calendar-grid">
+        <% @calendar_days.each do |day| %>
+          <%= link_to calendar_path(date: day[:date]),
+            class: "day #{'active' if day[:date] == @date}" do %>
+            <span class="day-number"><%= day[:date].day %></span>
+            <% if day[:available] %>
+              <span class="day-count"><%= day[:count] %></span>
+            <% end %>
+          <% end %>
+        <% end %>
+      </div>
+    </aside>
+
+    <!-- CRÉNEAUX -->
+    <section class="calendar-slots">
+
+      <% if @slots_by_service.present? %>
+
+        <% @slots_by_service.each do |service, slots| %>
+          <div class="service-card">
+            <h4><%= service.name %></h4>
+            <p>
+              <%= service.duration_minutes %> min –
+              <%= service.price_euros %> €
+            </p>
+
+            <div class="slots">
+              <% slots.each do |slot| %>
+                <%= link_to slot[:start].strftime("%H:%M"),
+                  new_service_booking_path(
+                    service,
+                    start_time: slot[:start],
+                    end_time:   slot[:end]
+                  ),
+                  class: "slot-pill" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+      <% else %>
+        <p class="empty">Sélectionnez une date pour voir les disponibilités</p>
+      <% end %>
+
+    </section>
+
+  </div>
+
+</div>

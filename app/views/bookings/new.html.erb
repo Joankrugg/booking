@@ -1,0 +1,243 @@
+<div class="container py-5">
+
+  <!-- =========================
+       SERVICE SUMMARY
+  ========================== -->
+  <div class="row mb-4 align-items-center">
+    <% if @service.photo.attached? %>
+      <div class="col-md-5">
+        <%= image_tag @service.photo,
+              class: "img-fluid rounded shadow-sm",
+              style: "max-height:180px; object-fit:cover;" %>
+      </div>
+    <% end %>
+
+    <div class="col-md-7">
+      <h1 class="fw-bold text-primary mb-2">
+        <%= @service.name %>
+      </h1>
+
+      <% if @service.description.present? %>
+        <p class="text-muted fs-6">
+          <%= @service.description %>
+        </p>
+      <% end %>
+
+      <p class="fw-bold fs-5 text-dark mb-0">
+        <%= @service.price_euros %> €
+        <span class="text-muted fs-6">
+          • <%= @service.duration_minutes %> min
+        </span>
+      </p>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <!-- =========================
+       DATE & SLOTS
+  ========================== -->
+  <div class="row mb-4">
+    <div class="col-md-4">
+      <label class="form-label fw-semibold">
+        Choisir une date
+      </label>
+
+      <input
+        type="date"
+        id="booking-date"
+        class="form-control shadow-sm"
+      >
+    </div>
+
+    <div class="col-md-8">
+      <h4 class="fw-bold mb-3">
+        Créneaux disponibles
+      </h4>
+
+      <div
+        id="slots-container"
+        class="p-2 border rounded bg-light"
+      >
+        <div class="text-muted">
+          Sélectionnez une date
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="my-4">
+
+  <!-- =========================
+       BOOKING FORM
+  ========================== -->
+  <h3 class="fw-bold mb-3">
+    Vos informations
+  </h3>
+
+  <%= form_with model: [@service, @booking], local: true do |f| %>
+
+    <!-- SLOT DATA -->
+    <%= f.hidden_field :start_time, id: "booking_start_time" %>
+    <%= f.hidden_field :end_time,   id: "booking_end_time" %>
+
+    <!-- CUSTOMER -->
+    <div class="mb-3">
+      <%= f.label :customer_name, "Nom complet",
+            class: "form-label fw-semibold" %>
+      <%= f.text_field :customer_name,
+            class: "form-control shadow-sm",
+            required: true %>
+    </div>
+
+    <div class="mb-3">
+      <%= f.label :customer_email, "Email",
+            class: "form-label fw-semibold" %>
+      <%= f.email_field :customer_email,
+            class: "form-control shadow-sm",
+            required: true %>
+    </div>
+
+    <!-- SLOT SUMMARY -->
+    <div
+      id="selected-slot-summary"
+      class="alert alert-success fw-semibold"
+      style="display:none;"
+    >
+      Créneau sélectionné :
+      <span id="selected-slot-label"></span>
+    </div>
+
+    <!-- ERRORS -->
+    <% if @booking.errors.any? %>
+      <div class="alert alert-danger">
+        <strong>Impossible de valider :</strong>
+        <ul class="mb-0">
+          <% @booking.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <!-- SUBMIT -->
+    <div class="d-grid">
+      <%= f.submit "Réserver ce créneau",
+            class: "btn btn-primary btn-lg",
+            data: { disable_with: "Réservation…" } %>
+    </div>
+
+  <% end %>
+</div>
+
+<!-- =========================
+     JAVASCRIPT (SLOTS)
+========================== -->
+<script>
+(function () {
+
+  const serviceId = <%= @service.id %>;
+  const availabilityUrl = `/services/${serviceId}/availability?date=`;
+
+  const dateInput      = document.getElementById("booking-date");
+  const slotsContainer = document.getElementById("slots-container");
+  const startField     = document.getElementById("booking_start_time");
+  const endField       = document.getElementById("booking_end_time");
+  const summaryBlock   = document.getElementById("selected-slot-summary");
+  const summaryLabel   = document.getElementById("selected-slot-label");
+
+  const prefillDate  = "<%= @booking.start_time&.to_date %>";
+  const prefillStart = "<%= @booking.start_time&.iso8601 %>";
+
+  // ---------
+  // Init date
+  // ---------
+  if (prefillDate) {
+    dateInput.value = prefillDate;
+    loadSlots(prefillDate);
+  }
+
+  dateInput.addEventListener("change", () => {
+    loadSlots(dateInput.value);
+  });
+
+  // ---------
+  // Fetch slots
+  // ---------
+  function loadSlots(dateStr) {
+    slotsContainer.innerHTML =
+      "<div class='text-muted'>Chargement…</div>";
+
+    fetch(availabilityUrl + encodeURIComponent(dateStr))
+      .then(r => r.json())
+      .then(data => renderSlots(data.slots || [], dateStr))
+      .catch(() => {
+        slotsContainer.innerHTML =
+          "<div class='text-danger'>Erreur de chargement</div>";
+      });
+  }
+
+  // ---------
+  // Render
+  // ---------
+  function renderSlots(slots, dateStr) {
+    if (slots.length === 0) {
+      slotsContainer.innerHTML =
+        "<div class='text-muted'>Aucun créneau disponible</div>";
+      return;
+    }
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "d-flex flex-wrap gap-2";
+
+    slots.forEach(slot => {
+      const start = new Date(slot.start);
+      const end   = new Date(slot.end);
+
+      const label =
+        formatTime(start) + " – " + formatTime(end);
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "btn btn-outline-primary btn-sm";
+      btn.textContent = label;
+
+      if (prefillStart && slot.start === prefillStart) {
+        selectSlot(btn, slot, dateStr, label);
+      }
+
+      btn.addEventListener("click", () => {
+        Array.from(wrapper.children)
+          .forEach(b => b.classList.remove("active"));
+
+        selectSlot(btn, slot, dateStr, label);
+      });
+
+      wrapper.appendChild(btn);
+    });
+
+    slotsContainer.innerHTML = "";
+    slotsContainer.appendChild(wrapper);
+  }
+
+  function selectSlot(btn, slot, dateStr, label) {
+    btn.classList.add("active");
+
+    startField.value = slot.start;
+    endField.value   = slot.end;
+
+    summaryLabel.textContent =
+      `${dateStr} · ${label}`;
+
+    summaryBlock.style.display = "block";
+  }
+
+  function formatTime(date) {
+    return date.toLocaleTimeString("fr-FR", {
+      hour: "2-digit",
+      minute: "2-digit"
+    });
+  }
+
+})();
+</script>
