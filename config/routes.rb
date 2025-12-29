@@ -8,6 +8,8 @@ Rails.application.routes.draw do
   # PUBLIC ROOT
   root "calendar#index"
   get "/calendar", to: "calendar#index"
+  get "/widgets/calendar", to: "widgets#calendar", as: :widgets_calendar
+
 
   # PROVIDER ROOT (protégé)
   namespace :provider do

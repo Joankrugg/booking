@@ -75,7 +75,7 @@
     Vos informations
   </h3>
 
-  <%= form_with model: [@service, @booking], local: true do |f| %>
+  <%= form_with model: [@service, @booking], data: { turbo: false } do |f| %>
 
     <!-- SLOT DATA -->
     <%= f.hidden_field :start_time, id: "booking_start_time" %>

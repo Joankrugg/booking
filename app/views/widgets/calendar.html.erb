@@ -1,0 +1,40 @@
+<div class="widget-container">
+
+  <div class="widget-header">
+    <strong>Disponibilités</strong>
+  </div>
+
+  <div class="widget-date">
+    <%= form_with url: widgets_calendar_path, method: :get, local: true do %>
+      <%= hidden_field_tag :provider_id, @provider.id %>
+      <%= date_field_tag :date, @date, class: "widget-date-input" %>
+    <% end %>
+  </div>
+
+  <% if @slots_by_service.present? %>
+    <% @slots_by_service.each do |service, slots| %>
+      <div class="widget-service">
+        <div class="widget-service-title">
+          <%= service.name %> · <%= service.price_euros %> €
+        </div>
+
+        <div class="widget-slots">
+          <% slots.each do |slot| %>
+            <%= link_to slot[:start].strftime("%H:%M"),
+              new_service_booking_path(
+                service,
+                start_time: slot[:start],
+                end_time: slot[:end]
+              ),
+              class: "widget-slot" %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  <% else %>
+    <p class="widget-empty">
+      Aucun créneau disponible ce jour.
+    </p>
+  <% end %>
+
+</div>

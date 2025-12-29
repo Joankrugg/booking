@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Réserver</title>
+
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag "widget", media: "all" %>
+  </head>
+
+  <body class="widget-body">
+    <%= yield %>
+
+    <footer class="widget-footer">
+      <small>
+        Réservation sécurisée via
+        <a href="https://tonapp.com" target="_blank" rel="noopener">
+          tonapp.com
+        </a>
+      </small>
+    </footer>
+  </body>
+</html>
