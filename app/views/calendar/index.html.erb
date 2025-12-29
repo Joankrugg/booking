@@ -28,10 +28,43 @@
           </div>
           <div class="col-md-6">
             <div class="d-flex flex-wrap gap-2">
-              <span class="badge bg-white text-dark border">Se détendre</span>
-              <span class="badge bg-white text-dark border">Bouger</span>
-              <span class="badge bg-white text-dark border">Découvrir</span>
-              <span class="badge bg-white text-dark border">Partager</span>
+              <div class="calendar-filters text-center mb-4">
+
+                <div class="dropdown d-inline-block">
+                  <button
+                    class="btn btn-outline-primary dropdown-toggle px-4"
+                    type="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+
+                    Envie de…
+                  </button>
+
+                  <ul class="dropdown-menu p-3 text-start" style="min-width: 220px;">
+
+                    <% @categories.each do |category| %>
+                      <li class="form-check mb-2">
+                        <%= check_box_tag(
+                          "categories[]",
+                          category.id,
+                          false,
+                          id: "category_#{category.id}",
+                          class: "form-check-input"
+                        ) %>
+
+                        <%= label_tag(
+                          "category_#{category.id}",
+                          category.name,
+                          class: "form-check-label"
+                        ) %>
+                      </li>
+                    <% end %>
+
+                  </ul>
+                </div>
+
+              </div>
+
             </div>
           </div>
         </div>
@@ -85,7 +118,7 @@
             Choisissez une date pour voir ce qui est possible.
           </p>
         </aside>
-      
+
 
         <!-- RÉSULTATS = EXPLORATION -->
         <section class="calendar-results">

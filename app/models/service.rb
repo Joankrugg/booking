@@ -1,6 +1,8 @@
 class Service < ApplicationRecord
   belongs_to :user
   belongs_to :service_type
+  belongs_to :category, optional: true
+
 
   has_many :service_areas, dependent: :destroy
   has_many :availability_rules, dependent: :destroy

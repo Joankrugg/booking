@@ -1,6 +1,7 @@
 # app/controllers/calendar_controller.rb
 class CalendarController < ApplicationController
   def index
+    @categories = Category.order(:name)
     @date = params[:date]&.to_date || Date.today
 
     @calendar_days = MonthBuilder.new(@date).build

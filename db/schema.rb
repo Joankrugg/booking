@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_21_133543) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_29_194858) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -77,6 +77,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_133543) do
     t.index ["service_id"], name: "index_bookings_on_service_id"
   end
 
+  create_table "categories", force: :cascade do |t|
+    t.string "name"
+    t.string "slug"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "service_areas", force: :cascade do |t|
     t.bigint "service_id", null: false
     t.string "address"
@@ -102,6 +109,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_133543) do
     t.datetime "updated_at", null: false
     t.integer "location_type", default: 0
     t.bigint "service_type_id", null: false
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_services_on_category_id"
     t.index ["service_type_id"], name: "index_services_on_service_type_id"
     t.index ["user_id"], name: "index_services_on_user_id"
   end
@@ -124,6 +133,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_21_133543) do
   add_foreign_key "availability_rules", "services"
   add_foreign_key "bookings", "services"
   add_foreign_key "service_areas", "services"
+  add_foreign_key "services", "categories"
   add_foreign_key "services", "service_types"
   add_foreign_key "services", "users"
 end
