@@ -1,69 +1,145 @@
 <div class="calendar-page">
-
-  <div class="calendar-container">
-    <!-- CALENDRIER -->
-    <div class="calendar-header">
-	  <%= link_to "‹",
-	        calendar_path(date: @date.prev_month.beginning_of_month),
-	        class: "month-nav" %>
-
-	  <strong>
-	    <%= @date.strftime("%B %Y") %>
-	  </strong>
-
-	  <%= link_to "›",
-	        calendar_path(date: @date.next_month.beginning_of_month),
-	        class: "month-nav" %>
-	</div>
-    <aside class="calendar-month">
-      <h2><%= @date.strftime("%B %Y") %></h2>
-
-      <div class="calendar-grid">
-        <% @calendar_days.each do |day| %>
-          <%= link_to calendar_path(date: day[:date]),
-            class: "day #{'active' if day[:date] == @date}" do %>
-            <span class="day-number"><%= day[:date].day %></span>
-            <% if day[:available] %>
-              <span class="day-count"><%= day[:count] %></span>
-            <% end %>
-          <% end %>
-        <% end %>
+  <div class="calendar-shell">
+    <!-- HERO -->
+    <section class="bg-primary text-white">
+      <div class="container py-5 text-center">
+        <h1 class="fw-bold display-5 mb-3">
+          Que faites-vous cette semaine ?
+        </h1>
+        <p class="lead">
+          Des activités et expériences disponibles près de vous,<br>
+          aux bonnes dates.
+        </p>
       </div>
-    </aside>
-
-    <!-- CRÉNEAUX -->
-    <section class="calendar-slots">
-
-      <% if @slots_by_service.present? %>
-
-        <% @slots_by_service.each do |service, slots| %>
-          <div class="service-card">
-            <h4><%= service.name %></h4>
-            <p>
-              <%= service.duration_minutes %> min –
-              <%= service.price_euros %> €
-            </p>
-
-            <div class="slots">
-              <% slots.each do |slot| %>
-                <%= link_to slot[:start].strftime("%H:%M"),
-                  new_service_booking_path(
-                    service,
-                    start_time: slot[:start],
-                    end_time:   slot[:end]
-                  ),
-                  class: "slot-pill" %>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-
-      <% else %>
-        <p class="empty">Sélectionnez une date pour voir les disponibilités</p>
-      <% end %>
-
     </section>
 
-  </div>
+    <!-- FILTRES -->
+    <section class="bg-light">
+      <div class="container py-4">
+        <div class="row g-3">
+          <div class="col-md-3">
+            <select class="form-select">
+              <option>Où ?</option>
+              <option>Autour de moi</option>
+            </select>
+          </div>
+          <div class="col-md-3">
+            <input type="date" class="form-control">
+          </div>
+          <div class="col-md-6">
+            <div class="d-flex flex-wrap gap-2">
+              <span class="badge bg-white text-dark border">Se détendre</span>
+              <span class="badge bg-white text-dark border">Bouger</span>
+              <span class="badge bg-white text-dark border">Découvrir</span>
+              <span class="badge bg-white text-dark border">Partager</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- CALENDRIER + RÉSULTATS -->
+    <div class="calendar-home">
+
+      <!-- HERO CLIENT -->
+      <section class="calendar-hero">
+        <h1>Que faites-vous cette semaine ?</h1>
+        <p>
+          Découvrez les activités disponibles selon vos dates et vos envies.
+        </p>
+      </section>
+
+      <div class="calendar-container">
+
+        <!-- CALENDRIER = FILTRE -->
+        <aside class="calendar-filter">
+
+          <div class="calendar-header">
+            <%= link_to "‹",
+                  calendar_path(date: @date.prev_month.beginning_of_month),
+                  class: "month-nav" %>
+
+            <strong><%= @date.strftime("%B %Y") %></strong>
+
+            <%= link_to "›",
+                  calendar_path(date: @date.next_month.beginning_of_month),
+                  class: "month-nav" %>
+          </div>
+
+          <div class="calendar-grid">
+            <% @calendar_days.each do |day| %>
+              <%= link_to calendar_path(date: day[:date]),
+                class: "day #{'active' if day[:date] == @date} #{'has-results' if day[:available]}" do %>
+
+                <span class="day-number"><%= day[:date].day %></span>
+
+                <% if day[:available] %>
+                  <span class="day-dot" title="<%= day[:count] %> activités disponibles"></span>
+                <% end %>
+
+              <% end %>
+            <% end %>
+          </div>
+
+          <p class="calendar-hint">
+            Choisissez une date pour voir ce qui est possible.
+          </p>
+        </aside>
+      
+
+        <!-- RÉSULTATS = EXPLORATION -->
+        <section class="calendar-results">
+
+          <% if @slots_by_service.present? %>
+
+            <h2 class="results-title">
+              Activités disponibles le <%= l(@date, format: :long) %>
+            </h2>
+
+            <% @slots_by_service.each do |service, slots| %>
+              <div class="activity-card">
+
+                <!-- IMAGE PLACEHOLDER -->
+                <div class="activity-image">
+                  <span>Image activité</span>
+                </div>
+
+                <div class="activity-body">
+                  <h3><%= service.name %></h3>
+
+                  <p class="activity-meta">
+                    <%= service.duration_minutes %> min ·
+                    <%= service.price_euros %> €
+                  </p>
+
+                  <div class="activity-slots">
+                    <% slots.each do |slot| %>
+                      <%= link_to slot[:start].strftime("%H:%M"),
+                        new_service_booking_path(
+                          service,
+                          start_time: slot[:start],
+                          end_time:   slot[:end]
+                        ),
+                        class: "slot-pill" %>
+                    <% end %>
+                  </div>
+                </div>
+
+              </div>
+            <% end %>
+
+          <% else %>
+            <div class="empty-state">
+              <p>
+                Sélectionnez une date pour découvrir<br>
+                les activités disponibles.
+              </p>
+            </div>
+          <% end %>
+
+        </section>
+
+      </div>
+    </div>
+  </div>
 </div>

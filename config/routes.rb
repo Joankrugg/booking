@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   }
 
   # PUBLIC ROOT
-  root "calendar#index"
+  root "home#index"
   get "/calendar", to: "calendar#index"
   get "/widgets/calendar", to: "widgets#calendar", as: :widgets_calendar
 
