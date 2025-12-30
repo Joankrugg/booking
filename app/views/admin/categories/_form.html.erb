@@ -1,0 +1,27 @@
+<%= form_with model: [:admin, @category], class: "card p-4" do |f| %>
+  <% if @category.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="mb-0">
+        <% @category.errors.full_messages.each do |m| %>
+          <li><%= m %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="mb-3">
+    <%= f.label :name, "Nom", class: "form-label" %>
+    <%= f.text_field :name, class: "form-control", required: true %>
+  </div>
+
+  <div class="mb-3">
+    <%= f.label :slug, "Slug (URL / filtre)", class: "form-label" %>
+    <%= f.text_field :slug, class: "form-control", required: true %>
+    <div class="form-text">Ex : se-detendre, bouger, decouvrir</div>
+  </div>
+
+  <div class="d-flex gap-2">
+    <%= f.submit class: "btn btn-primary" %>
+    <%= link_to "Annuler", admin_categories_path, class: "btn btn-outline-secondary" %>
+  </div>
+<% end %>

@@ -4,9 +4,15 @@ Rails.application.routes.draw do
     registrations: "users/registrations",
     passwords: "users/passwords"
   }
+  namespace :admin do
+    root "categories#index"
+    resources :categories
+    resources :services
+    resources :bookings, only: %i[index show]
+  end
 
   # PUBLIC ROOT
-  root "home#index"
+  root "calendar#index"
   get "/calendar", to: "calendar#index"
   get "/widgets/calendar", to: "widgets#calendar", as: :widgets_calendar
 
