@@ -1,5 +1,6 @@
 # app/controllers/calendar_controller.rb
 class CalendarController < ApplicationController
+  layout "calendar"
   def index
     @categories = Category.order(:name)
     @date = params[:date]&.to_date || Date.today
