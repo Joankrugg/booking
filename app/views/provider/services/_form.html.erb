@@ -6,6 +6,18 @@
   </div>
 
   <div class="mb-3">
+    <%= f.label :category_id, "Catégorie" %>
+    <%= f.collection_select :category_id,
+          Category.order(:name),
+          :id,
+          :name,
+          { prompt: "Choisir une catégorie" },
+          class: "form-control",
+          required: true %>
+  </div>
+
+
+  <div class="mb-3">
     <%= f.label :description, "Description" %>
     <%= f.text_area :description, class: "form-control", rows: 3 %>
   </div>

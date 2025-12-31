@@ -42,6 +42,7 @@ class Provider::ServicesController < Provider::BaseController
   def service_params
     params.require(:service).permit(
       :name,
+      :category_id,
       :description,
       :price_euros,
       :duration_minutes,

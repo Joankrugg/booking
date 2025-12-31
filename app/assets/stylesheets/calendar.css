@@ -10,6 +10,12 @@
   --card-radius: 16px;
 }
 
+.dropdown-menu {
+  z-index: 1050;
+}
+.calendar-hero {
+  overflow: visible;
+}
 
 /* =========================
    PAGE WRAPPER (CENTRAGE CLÉ)
@@ -25,6 +31,8 @@
 .calendar-shell {
   width: 100%;
   max-width: 1080px;
+  margin: 0 auto;          /* ← LE FIX */
+  padding: 0 1rem;         /* confort mobile */
 }
 
 .calendar-container {
@@ -41,6 +49,7 @@
   width: 100%;
   max-width: 360px;
   margin: 0 auto;
+  padding-bottom: 40px;
 }
 
 /* =========================
@@ -55,6 +64,9 @@
 }
 
 .calendar-hero-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 1rem;
   text-align: center;
 }
 
@@ -241,7 +253,7 @@
   }
 
   .calendar-filter {
-    max-width: 100%;
+    max-width: 90%;
   }
 
   .activity-card {
@@ -257,4 +269,98 @@
     max-width: 100%;
   }
 }
+.smart-dropdown {
+  position: relative;
+}
+
+.smart-dropdown__summary {
+  list-style: none;
+  cursor: pointer;
+}
+
+/* enlève le petit triangle natif */
+.smart-dropdown__summary::-webkit-details-marker {
+  display: none;
+}
+
+.smart-dropdown[open] .smart-dropdown__summary {
+  box-shadow: 0 0 0 3px rgba(255,255,255,0.18);
+}
+
+/* le menu */
+.smart-dropdown__menu {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 8px);
+  background: #fff;
+  color: #111;
+  border-radius: 12px;
+  padding: 14px 14px;
+  box-shadow: 0 18px 45px rgba(0,0,0,0.18);
+  z-index: 2000;
+}
+
+/* labels dans le hero bleu */
+.calendar-hero .form-check-label {
+  color: #111;
+}
+
+.filters-chips {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: .75rem;
+  max-width: 640px;
+  margin: 0 auto 2rem;
+}
+
+.filter-chip {
+  position: relative;
+  width: 100%;
+}
+
+.chip-label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 44px;
+  border-radius: 999px;
+  font-size: .9rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #f1f3f5;
+  color: #333;
+  transition: all .15s ease;
+  border: 1px solid transparent;
+}
+
+/* Hover */
+.chip-label:hover {
+  background: #e9ecef;
+}
+
+/* Checked */
+.filter-chip input:checked + .chip-label {
+  background: #0d6efd;
+  color: white;
+  border-color: #0d6efd;
+  box-shadow: 0 4px 12px rgba(13,110,253,.25);
+}
+
+/* Focus */
+.filter-chip input:focus + .chip-label {
+  outline: 2px solid rgba(13,110,253,.4);
+  outline-offset: 2px;
+}
+
+/* Cache complètement la checkbox native */
+.filter-chip input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+}
+
 
