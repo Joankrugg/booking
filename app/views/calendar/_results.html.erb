@@ -1,0 +1,91 @@
+<turbo-frame id="calendar-results">
+
+  <!-- =========================
+       CALENDRIER
+  ========================== -->
+  <section class="calendar-container">
+
+    <div class="calendar-filter">
+      <div class="calendar-header">
+
+        <%= link_to "‹",
+              calendar_path(
+                date: date.prev_month.beginning_of_month,
+                categories: selected_categories.presence,
+                location: location.presence
+              ),
+              data: { turbo_frame: "calendar-results" },
+              class: "month-nav" %>
+
+        <strong><%= date.strftime("%B %Y") %></strong>
+
+        <%= link_to "›",
+              calendar_path(
+                date: date.next_month.beginning_of_month,
+                categories: selected_categories.presence,
+                location: location.presence
+              ),
+              data: { turbo_frame: "calendar-results" },
+              class: "month-nav" %>
+      </div>
+
+      <div class="calendar-grid">
+        <% calendar_days.each do |day| %>
+          <%= link_to calendar_path(
+                date: day[:date],
+                categories: selected_categories.presence,
+                location: location.presence
+              ),
+              data: { turbo_frame: "calendar-results" },
+              class: "day" do %>
+
+            <span class="day-number"><%= day[:date].day %></span>
+            <% if day[:available] %>
+              <span class="day-dot"></span>
+            <% end %>
+
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- =========================
+         ACTIVITÉS
+    ========================== -->
+    <div class="calendar-results">
+
+      <% if slots_by_service.any? %>
+        <% slots_by_service.each do |service, slots| %>
+          <div class="activity-card">
+            <div class="activity-body">
+              <h3><%= service.name %></h3>
+
+              <div class="activity-meta">
+                <%= service.category&.name %> •
+                <%= service.duration_minutes %> min •
+                <%= service.price_euros %> €
+              </div>
+
+              <div class="activity-slots">
+                <% slots.each do |slot| %>
+                  <%= link_to slot[:start].strftime("%H:%M"),
+                        new_service_booking_path(
+                          service,
+                          start_time: slot[:start],
+                          end_time: slot[:end]
+                        ),
+                        class: "slot-pill" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      <% else %>
+        <div class="empty-state">
+          Aucune activité pour cette sélection
+        </div>
+      <% end %>
+
+    </div>
+  </section>
+</turbo-frame>

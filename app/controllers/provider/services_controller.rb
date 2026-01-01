@@ -3,6 +3,10 @@ class Provider::ServicesController < Provider::BaseController
     @services = current_user.services.includes(:service_type)
   end
 
+  def show
+    @service = current_user.services.find(params[:id])
+  end
+
   def new
     @service = current_user.services.new
   end
@@ -10,11 +14,9 @@ class Provider::ServicesController < Provider::BaseController
   def create
     @service = current_user.services.new(service_params)
     if @service.save
-      redirect_to provider_services_path, notice: "Prestation créée avec succès."
+      redirect_to provider_service_path(@service), notice: "Prestation créée avec succès."
     else
       render :new, status: :unprocessable_entity
-      Rails.logger.info "VALID? #{@service.valid?}"
-      Rails.logger.info @service.errors.full_messages.inspect
     end
   end
 
@@ -25,7 +27,7 @@ class Provider::ServicesController < Provider::BaseController
   def update
     @service = current_user.services.find(params[:id])
     if @service.update(service_params)
-      redirect_to provider_services_path, notice: "Prestation mise à jour."
+      redirect_to provider_service_path(@service), notice: "Prestation mise à jour."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -51,5 +53,3 @@ class Provider::ServicesController < Provider::BaseController
     )
   end
 end
-
-

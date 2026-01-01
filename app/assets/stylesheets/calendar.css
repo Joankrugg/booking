@@ -10,6 +10,7 @@
   --card-radius: 16px;
 }
 
+
 .dropdown-menu {
   z-index: 1050;
 }
@@ -363,4 +364,6 @@
   height: 0;
 }
 
-
+turbo-frame { 
+  display: block;
+}

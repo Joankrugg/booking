@@ -10,9 +10,11 @@ class Provider::ServiceAreasController < Provider::BaseController
   end
 
   def create
-    @area = @service.service_areas.new(area_params)
-    if @area.save
-      redirect_to provider_service_service_areas_path(@service), notice: "Zone ajoutée."
+    @service_area = @service.service_areas.new(area_params)
+
+    if @service_area.save
+      geocode_service_area(@service_area)
+      redirect_to provider_service_path(@service), notice: "Zone enregistrée"
     else
       render :new, status: :unprocessable_entity
     end
@@ -43,9 +45,18 @@ class Provider::ServiceAreasController < Provider::BaseController
     @service = current_user.services.find(params[:service_id])
   end
 
+  def geocode_service_area(service_area)
+    return if service_area.latitude.present? && service_area.longitude.present?
+
+    begin
+      service_area.geocode
+      service_area.save if service_area.changed?
+    rescue OpenSSL::SSL::SSLError => e
+      Rails.logger.warn "Geocoding failed: #{e.message}"
+    end
+  end
+
   def area_params
     params.require(:service_area).permit(:address, :radius_km)
   end
 end
-
-

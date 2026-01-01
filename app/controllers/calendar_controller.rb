@@ -1,27 +1,42 @@
-# app/controllers/calendar_controller.rb
 class CalendarController < ApplicationController
   layout "calendar"
+
   def index
+    # ---- filtres
     @selected_categories = params[:categories]&.map(&:to_i) || []
+    @location            = params[:location].to_s.strip.presence
+    @date                = params[:date]&.to_date || Date.today
 
+    # ---- UI
     @categories = Category.order(:name)
+    @calendar_days = build_calendar_days
 
-    @date = params[:date]&.to_date || Date.today
+    # ---- base services
+    services = Service
+      .includes(:category, :service_areas)
+      .references(:service_areas)
 
-    @calendar_days = MonthBuilder.new(@date).build
-
-    services = Service.includes(:category)
-
-    if params[:categories].present?
-      services = services.where(category_id: params[:categories])
+    if @selected_categories.any?
+      services = services.where(category_id: @selected_categories)
     end
 
-    slots = DayAvailability.new(@date, services: services).build
-    @slots_by_service = slots.group_by { |slot| slot[:service] }
+    if @location
+      services = services
+        .joins(:service_areas)
+        .where("service_areas.address ILIKE ?", "%#{@location}%")
+    end
+
+    services = services.distinct
+
+    # ---- DISPONIBILITÉS DU JOUR UNIQUEMENT
+    day_slots = DayAvailability.new(@date, services: services).build
+
+    @slots_by_service = day_slots.select { |slot| slot[:service].present? }.group_by { |slot| slot[:service] }
   end
 
-  def day
-    redirect_to calendar_path(date: params[:date], categories: params[:categories])
+  private
+
+  def build_calendar_days
+    MonthBuilder.new(@date).build
   end
 end
-

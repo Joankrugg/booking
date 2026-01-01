@@ -10,8 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_12_30_202622) do
+ActiveRecord::Schema[8.0].define(version: 2025_12_31_162653) do
   # These are extensions that must be enabled in order to support this database
+  enable_extension "cube"
+  enable_extension "earthdistance"
   enable_extension "pg_catalog.plpgsql"
 
   create_table "active_storage_attachments", force: :cascade do |t|
@@ -90,6 +92,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_12_30_202622) do
     t.integer "radius_km"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.float "latitude"
+    t.float "longitude"
     t.index ["service_id"], name: "index_service_areas_on_service_id"
   end
 

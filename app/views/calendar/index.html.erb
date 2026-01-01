@@ -1,144 +1,172 @@
 <div class="calendar-page">
   <div class="calendar-shell">
 
-    <!-- HERO -->
-    <div class="calendar-hero-inner">
-      <h1>Que voulez-vous faire ?</h1>
-      <p>Sélectionnez vos envies, choisissez une date, découvrez les disponibilités.</p>
-    </div>
+    <!-- =========================
+         HERO / FILTRES
+    ========================== -->
+    <section class="calendar-hero">
+      <div class="calendar-hero-inner">
 
-    <!-- FILTRES -->
-    <div class="filters-chips">
-      <% @categories.each do |category| %>
-        <label class="filter-chip">
-          <input type="checkbox"
-                 class="category-filter"
-                 value="<%= category.id %>"
-                 <%= "checked" if @selected_categories.include?(category.id) %>>
+        <h1>Trouver une activité</h1>
+        <p>Choisissez quoi, quand et où</p>
 
-          <span class="chip-label">
-            <%= category.name %>
-          </span>
-        </label>
-      <% end %>
-    </div>
+        <!-- FORM = FILTRES SERVEUR -->
+        <form method="get" action="<%= calendar_path %>" data-turbo="false">
+
+          <!-- Ville -->
+          <div class="mb-4">
+            <input
+  id="location-input"
+  type="text"
+  value="<%= params[:location] %>"
+  placeholder="Ville"
+  class="form-control"
+/>
 
 
-    <!-- CALENDRIER -->
-    <div class="calendar-filter">
-      <div class="calendar-header">
-        <%= link_to "‹",
-              calendar_path(date: @date.prev_month.beginning_of_month),
-              class: "month-nav" %>
+          </div>
 
-        <strong><%= @date.strftime("%B %Y") %></strong>
+          <!-- Catégories -->
+          <div class="filters-chips">
+            <% @categories.each do |category| %>
+              <div class="filter-chip">
+                <input type="checkbox"
+                       id="cat_<%= category.id %>"
+                       name="categories[]"
+                       value="<%= category.id %>"
+                       <%= "checked" if @selected_categories.include?(category.id) %>
+                       onchange="this.form.submit()">
 
-        <%= link_to "›",
-              calendar_path(date: @date.next_month.beginning_of_month),
-              class: "month-nav" %>
-      </div>
-
-      <div class="calendar-grid">
-        <% @calendar_days.each do |day| %>
-          <%= link_to calendar_path(date: day[:date], categories: @selected_categories.presence), class: "day calendar-day-link #{'active' if day[:date] == @date}" do %>
-
-            <span class="day-number"><%= day[:date].day %></span>
-            <% if day[:available] %>
-              <span class="day-dot"></span>
+                <label class="chip-label" for="cat_<%= category.id %>">
+                  <%= category.name %>
+                </label>
+              </div>
             <% end %>
-          <% end %>
-        <% end %>
-      </div>
-    </div>
+          </div>
 
-    <!-- RÉSULTATS -->
-    <div class="calendar-results">
-      <% if @slots_by_service.present? %>
+        </form>
+      </div>
+    </section>
+
+    <!-- =========================
+         CALENDRIER
+    ========================== -->
+    <section class="calendar-container">
+
+      <div class="calendar-filter">
+
+        <div class="calendar-header">
+          <strong><%= @date.strftime("%B %Y") %></strong>
+        </div>
+
+        <div class="calendar-grid">
+          <% @calendar_days.each do |day| %>
+            <%= link_to "#",
+              class: "calendar-day-link day",
+              data: { date: day[:date] } do %>
+              <span class="day-number"><%= day[:date].day %></span>
+              <% if day[:available] %><span class="day-dot"></span><% end %>
+            <% end %>
+
+          <% end %>
+        </div>
+      </div>
+
+      <!-- =========================
+           RESULTATS
+      ========================== -->
+      <div class="calendar-results">
+
         <% @slots_by_service.each do |service, slots| %>
-          <div class="activity-card">
+          <% next if service.nil? %>
+          <div class="activity-card" data-service>
+
             <div class="activity-body">
               <h3><%= service.name %></h3>
+
               <div class="activity-meta">
-                <%= service.duration_minutes %> min · <%= service.price_euros %> €
+                <%= service.category&.name %> •
+                <%= service.duration_minutes %> min •
+                <%= service.price_euros %> €
               </div>
 
               <div class="activity-slots">
                 <% slots.each do |slot| %>
-                  <%= link_to slot[:start].strftime("%H:%M"),
-                      new_service_booking_path(
-                        service,
+                  <a href="<%= new_service_booking_path(service,
                         start_time: slot[:start],
-                        end_time: slot[:end]
-                      ),
-                      class: "slot-pill" %>
+                        end_time: slot[:end]) %>"
+                     class="slot-pill"
+                     data-slot-date="<%= slot[:start].to_date %>">
+
+                    <%= slot[:start].strftime("%H:%M") %>
+                  </a>
                 <% end %>
               </div>
             </div>
+
           </div>
         <% end %>
-      <% else %>
-        <p class="empty-state">
-          Cliquez sur une date pour voir les disponibilités.
-        </p>
-      <% end %>
-    </div>
 
+      </div>
+    </section>
   </div>
 </div>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-  const categoryInputs = document.querySelectorAll(".category-filter");
-  const dayLinks = document.querySelectorAll(".calendar-day-link");
 
-  function selectedCategories() {
-    return Array.from(categoryInputs)
-      .filter(cb => cb.checked)
-      .map(cb => `categories[]=${cb.value}`)
-      .join("&");
+<script>
+  function updateCalendarParams(changes = {}) {
+    const params = new URLSearchParams(window.location.search);
+
+    // Applique les changements
+    Object.entries(changes).forEach(([key, value]) => {
+      params.delete(key);
+
+      if (Array.isArray(value)) {
+        value.forEach(v => params.append(key, v));
+      } else if (value && value.length > 0) {
+        params.set(key, value);
+      }
+    });
+
+    window.location.href = `/calendar?${params.toString()}`;
   }
 
-  dayLinks.forEach(link => {
-    link.addEventListener("click", (e) => {
+  // -------------------------
+  // Catégories
+  // -------------------------
+  document.querySelectorAll(".category-filter").forEach(input => {
+    input.addEventListener("change", () => {
+      const categories = Array
+        .from(document.querySelectorAll(".category-filter:checked"))
+        .map(cb => cb.value);
+
+      updateCalendarParams({ "categories[]": categories });
+    });
+  });
+
+  // -------------------------
+  // Ville
+  // -------------------------
+  const locationInput = document.querySelector("#location-input");
+  let cityTimeout;
+
+  if (locationInput) {
+    locationInput.addEventListener("input", () => {
+      clearTimeout(cityTimeout);
+      cityTimeout = setTimeout(() => {
+        updateCalendarParams({ location: locationInput.value });
+      }, 2000); // debounce propre
+    });
+  }
+
+  // -------------------------
+  // Calendrier
+  // -------------------------
+  document.querySelectorAll(".calendar-day-link").forEach(link => {
+    link.addEventListener("click", e => {
       e.preventDefault();
-
-      const baseUrl = link.getAttribute("href");
-      const categories = selectedCategories();
-
-      const targetUrl = categories ? `${baseUrl}&${categories}` : baseUrl;
-      window.location.href = targetUrl;
-    });
-  });
-});
-</script>
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const categoryInputs = document.querySelectorAll(".category-filter");
-
-    categoryInputs.forEach(input => {
-      input.addEventListener("change", () => {
-        const params = new URLSearchParams(window.location.search);
-
-        // On enlève toutes les catégories
-        params.delete("categories[]");
-
-        // On remet celles cochées
-        categoryInputs.forEach(cb => {
-          if (cb.checked) {
-            params.append("categories[]", cb.value);
-          }
-        });
-
-        // On conserve la date si elle existe
-        const date = params.get("date");
-        const base = date ? `/calendar?date=${date}` : "/calendar";
-
-        const targetUrl =
-          params.toString().includes("categories")
-            ? `${base}&${params.toString()}`
-            : base;
-
-        window.location.href = targetUrl;
-      });
+      updateCalendarParams({ date: link.dataset.date });
     });
   });
 </script>
+
+

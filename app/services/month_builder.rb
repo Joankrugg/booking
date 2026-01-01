@@ -1,16 +1,22 @@
 class MonthBuilder
   def initialize(date)
-    @month = date.beginning_of_month
+    @date = date
   end
 
   def build
-    (@month..@month.end_of_month).map do |date|
-      slots = DayAvailability.new(date).build
+    range = @date.beginning_of_month..@date.end_of_month
+
+    range.map do |day|
       {
-        date: date,
-        available: slots.any?,
-        count: slots.count
+        date: day,
+        available: available_on?(day)
       }
     end
+  end
+
+  private
+
+  def available_on?(day)
+    DayAvailability.new(day).build.any?
   end
 end
