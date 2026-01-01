@@ -23,9 +23,10 @@
           <!-- Ville -->
           <div class='row'> 
             <div class="col-lg-6 mx-auto" style='padding-bottom: 30px;'>
-              <input id="location-input" type="text" value="<%= params[:location] %>" placeholder="Ville" class="form-control"/>
+              <input id="location-input" name="location" type="text" value="<%= params[:location] %>" placeholder="Ville" class="form-control"/>
             </div>
           </div>
+          <input type="hidden" name="date" value="<%= @date %>" id="date-input">
         </form>
       </div>
     </section>
@@ -103,22 +104,7 @@
 </div>
 
 <script>
-  function updateCalendarParams(changes = {}) {
-    const params = new URLSearchParams(window.location.search);
 
-    // Applique les changements
-    Object.entries(changes).forEach(([key, value]) => {
-      params.delete(key);
-
-      if (Array.isArray(value)) {
-        value.forEach(v => params.append(key, v));
-      } else if (value && value.length > 0) {
-        params.set(key, value);
-      }
-    });
-
-    window.location.href = `/calendar?${params.toString()}`;
-  }
 
   // -------------------------
   // Catégories
@@ -136,6 +122,8 @@
   // -------------------------
   // Ville
   // -------------------------
+  const form = document.querySelector("form");
+
   const locationInput = document.querySelector("#location-input");
   let cityTimeout;
 
@@ -143,8 +131,8 @@
     locationInput.addEventListener("input", () => {
       clearTimeout(cityTimeout);
       cityTimeout = setTimeout(() => {
-        updateCalendarParams({ location: locationInput.value });
-      }, 2000); // debounce propre
+        form.submit();
+      }, 600);
     });
   }
 
@@ -154,9 +142,11 @@
   document.querySelectorAll(".calendar-day-link").forEach(link => {
     link.addEventListener("click", e => {
       e.preventDefault();
-      updateCalendarParams({ date: link.dataset.date });
+      document.querySelector("#date-input").value = link.dataset.date;
+      form.submit();
     });
   });
+
 </script>
 
 
