@@ -1,49 +1,29 @@
 <div class="calendar-page">
   <div class="calendar-shell">
-
     <!-- =========================
          HERO / FILTRES
     ========================== -->
     <section class="calendar-hero">
       <div class="calendar-hero-inner">
-
         <h1>Trouver une activité</h1>
-        <p>Choisissez quoi, quand et où</p>
-
+        <p>Choisissez quoi, où et quand</p>
         <!-- FORM = FILTRES SERVEUR -->
-        <form method="get" action="<%= calendar_path %>" data-turbo="false">
-
-          <!-- Ville -->
-          <div class="mb-4">
-            <input
-  id="location-input"
-  type="text"
-  value="<%= params[:location] %>"
-  placeholder="Ville"
-  class="form-control"
-/>
-
-
-          </div>
-
+        <form method="get" action="<%= calendar_path %>" data-turbo="false">         
           <!-- Catégories -->
           <div class="filters-chips">
             <% @categories.each do |category| %>
               <div class="filter-chip">
-                <input type="checkbox"
-                       id="cat_<%= category.id %>"
-                       name="categories[]"
-                       value="<%= category.id %>"
-                       <%= "checked" if @selected_categories.include?(category.id) %>
-                       onchange="this.form.submit()">
-
+                <input type="checkbox" id="cat_<%= category.id %>" name="categories[]" value="<%= category.id %>" <%= "checked" if @selected_categories.include?(category.id) %> onchange="this.form.submit()">
                 <label class="chip-label" for="cat_<%= category.id %>">
                   <%= category.name %>
                 </label>
               </div>
             <% end %>
           </div>
-
+          <!-- Ville -->
+          <div class="mb-4">
+            <input id="location-input" type="text" value="<%= params[:location] %>" placeholder="Ville" class="form-control"/>
+          </div>
         </form>
       </div>
     </section>
@@ -52,13 +32,28 @@
          CALENDRIER
     ========================== -->
     <section class="calendar-container">
-
       <div class="calendar-filter">
-
         <div class="calendar-header">
-          <strong><%= @date.strftime("%B %Y") %></strong>
-        </div>
+          <%= link_to "‹",
+                calendar_path(
+                  params.permit!.to_h.merge(
+                    date: @date.prev_month.beginning_of_month.to_s
+                  )
+                ),
+                class: "month-nav",
+                data: { turbo: false } %>
 
+          <strong><%= @date.strftime("%B %Y") %></strong>
+
+          <%= link_to "›",
+                calendar_path(
+                  params.permit!.to_h.merge(
+                    date: @date.next_month.beginning_of_month.to_s
+                  )
+                ),
+                class: "month-nav",
+                data: { turbo: false } %>
+        </div>
         <div class="calendar-grid">
           <% @calendar_days.each do |day| %>
             <%= link_to "#",
@@ -67,46 +62,32 @@
               <span class="day-number"><%= day[:date].day %></span>
               <% if day[:available] %><span class="day-dot"></span><% end %>
             <% end %>
-
           <% end %>
         </div>
       </div>
-
       <!-- =========================
            RESULTATS
       ========================== -->
       <div class="calendar-results">
-
         <% @slots_by_service.each do |service, slots| %>
           <% next if service.nil? %>
           <div class="activity-card" data-service>
-
             <div class="activity-body">
               <h3><%= service.name %></h3>
-
               <div class="activity-meta">
                 <%= service.category&.name %> •
                 <%= service.duration_minutes %> min •
                 <%= service.price_euros %> €
               </div>
-
               <div class="activity-slots">
                 <% slots.each do |slot| %>
-                  <a href="<%= new_service_booking_path(service,
-                        start_time: slot[:start],
-                        end_time: slot[:end]) %>"
-                     class="slot-pill"
-                     data-slot-date="<%= slot[:start].to_date %>">
-
-                    <%= slot[:start].strftime("%H:%M") %>
+                  <a href="<%= new_service_booking_path(service, start_time: slot[:start], end_time: slot[:end]) %>" class="slot-pill" data-slot-date="<%= slot[:start].to_date %>"><%= slot[:start].strftime("%H:%M") %>
                   </a>
                 <% end %>
               </div>
             </div>
-
           </div>
         <% end %>
-
       </div>
     </section>
   </div>
@@ -168,5 +149,7 @@
     });
   });
 </script>
+
+
 
 

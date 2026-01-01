@@ -51,6 +51,7 @@
   max-width: 360px;
   margin: 0 auto;
   padding-bottom: 40px;
+  padding-left: 20px;
 }
 
 /* =========================
@@ -254,7 +255,8 @@
   }
 
   .calendar-filter {
-    max-width: 90%;
+    max-width: 100%;
+    padding-left: 30px;
   }
 
   .activity-card {
@@ -363,7 +365,7 @@
   width: 0;
   height: 0;
 }
-
-turbo-frame { 
-  display: block;
+#location-input{
+  margin: auto;
+  text-align: center;
 }
