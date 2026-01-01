@@ -72,6 +72,13 @@
         <% @slots_by_service.each do |service, slots| %>
           <% next if service.nil? %>
           <div class="activity-card" data-service>
+            <% if service.photo.attached? %>
+              <%= image_tag service.photo, height: 132, width: 200, crop: :fill, class: "activity-img", alt: service.name %>
+            <% else %>
+              <div class="activity-placeholder">
+                <span><%= service.category&.name || "Activité" %></span>
+              </div>
+            <% end %>          
             <div class="activity-body">
               <h3><%= service.name %></h3>
               <div class="activity-meta">
