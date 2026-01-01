@@ -11,14 +11,32 @@ class Provider::AvailabilityRulesController < Provider::BaseController
   end
 
   def create
+  weekdays = rule_params.delete(:weekdays)
+
+  if weekdays.blank?
     @rule = @service.availability_rules.new(rule_params)
-    if @rule.save
-      redirect_to provider_service_availability_rules_path(@service),
-        notice: "Plage ajoutée."
-    else
-      render :new, status: :unprocessable_entity
+    @rule.errors.add(:weekday, "doit être sélectionné")
+    return render :new, status: :unprocessable_entity
+  end
+
+  AvailabilityRule.transaction do
+    weekdays.each do |day|
+      @service.availability_rules.create!(
+        weekday: day,
+        start_time: rule_params[:start_time],
+        end_time: rule_params[:end_time]
+      )
     end
   end
+
+  redirect_to provider_service_availability_rules_path(@service),
+    notice: "Plages ajoutées."
+
+  rescue ActiveRecord::RecordInvalid
+    @rule = @service.availability_rules.new(rule_params)
+    render :new, status: :unprocessable_entity
+  end
+
 
   def edit; end
 
@@ -48,7 +66,8 @@ class Provider::AvailabilityRulesController < Provider::BaseController
   end
 
   def rule_params
-    params.require(:availability_rule).permit(:weekday, :start_time, :end_time)
+    params.require(:availability_rule).permit(:start_time, :end_time, weekdays: [])
   end
+
 end
 

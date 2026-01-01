@@ -47,6 +47,7 @@ class Provider::ServicesController < Provider::BaseController
       :category_id,
       :description,
       :price_euros,
+      :buffer_minutes,
       :duration_minutes,
       :service_type_id,
       :photo

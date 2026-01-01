@@ -60,7 +60,11 @@ class DayAvailability
 
     slots = []
 
-    while start_time + service.duration_minutes.minutes <= end_time
+    slot_duration = service.duration_minutes.minutes
+      buffer        = service.buffer_minutes.minutes
+      step          = slot_duration + buffer
+
+      while start_time + slot_duration <= end_time
       slot_end = start_time + service.duration_minutes.minutes
 
       unless overlaps_booking?(service, start_time, slot_end) ||
@@ -71,7 +75,7 @@ class DayAvailability
         }
       end
 
-      start_time += SLOT_STEP_MINUTES.minutes
+      start_time += step
     end
 
     slots
