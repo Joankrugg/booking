@@ -24,5 +24,10 @@ class Service < ApplicationRecord
   def reservable_on?(date)
     date >= reservable_from
   end
+  scope :active, -> { where(active: true) }
+
+  def active?
+    active && user.active?
+  end
 end
 

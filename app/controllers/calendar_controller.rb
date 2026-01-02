@@ -16,9 +16,8 @@ class CalendarController < ApplicationController
     @calendar_days = build_calendar_days
 
     # ---- base services
-    services = Service
-      .includes(:category, :service_areas)
-      .references(:service_areas)
+    services = Service.includes(:category, :service_areas, :user).where(active: true).where(users: { active: true }).references(:user)
+
 
     if @selected_categories.any?
       services = services.where(category_id: @selected_categories)

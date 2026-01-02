@@ -25,6 +25,9 @@ Rails.application.routes.draw do
       resources :availability_rules
       resources :availability_exceptions
     end
+    resource :profile, only: [] do
+      patch :toggle_active
+    end
   end
 
   # PUBLIC SERVICES

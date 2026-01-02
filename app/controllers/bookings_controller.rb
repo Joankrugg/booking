@@ -19,6 +19,14 @@ class BookingsController < ApplicationController
                   alert: "Cette activité sera bientôt réservable."
       return
     end
+    unless @service.active?
+      @booking = @service.bookings.new(booking_params)
+      @booking.errors.add(
+        :base,
+        "Ce service est temporairement indisponible."
+      )
+      return render :new, status: :unprocessable_entity
+    end
     unless @service.reservable_on?(booking_params[:start_time].to_date)
       @booking = @service.bookings.new(booking_params)
       @booking.errors.add(

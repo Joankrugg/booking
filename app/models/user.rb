@@ -5,5 +5,8 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :validatable
 
   has_many :services, dependent: :destroy
+  def active?
+    active
+  end
 
 end

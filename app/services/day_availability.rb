@@ -30,9 +30,14 @@ class DayAvailability
   # JOUR UNIQUE (page résultats)
   # =========================
   def build
-    services_relation.flat_map do |service|
-      available_slots_for(service, @date).map { |slot| slot.merge(service: service) }
-    end
+    return [] if @services.blank?
+
+    @services
+      .select(&:active?)
+      .flat_map do |service|
+        available_slots_for(service, @date)
+          .map { |slot| slot.merge(service: service) }
+      end
   end
 
   private

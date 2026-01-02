@@ -51,7 +51,8 @@ class Provider::ServicesController < Provider::BaseController
       :duration_minutes,
       :service_type_id,
       :photo,
-      :min_notice_days
+      :min_notice_days,
+      :active
     )
   end
 end
