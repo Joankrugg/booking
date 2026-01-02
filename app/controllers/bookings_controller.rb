@@ -10,7 +10,15 @@ class BookingsController < ApplicationController
   end
 
   def create
+
     @service = Service.find(params[:service_id])
+    provider = @service.user
+
+    unless provider.stripe_connected? && provider.subscription_status == "active"
+      redirect_to calendar_path,
+                  alert: "Cette activité sera bientôt réservable."
+      return
+    end
 
     Booking.transaction do
       # 🔒 verrou pessimiste sur les bookings du service
@@ -30,36 +38,44 @@ class BookingsController < ApplicationController
         return render :new, status: :conflict
       end
 
-      # création du booking
       @booking = @service.bookings.new(booking_params)
       @booking.status = "pending"
       @booking.amount_cents = @service.price_euros * 100
       @booking.save!
 
+      # 🧠 garde-fous produit (ÉTAPE 8)
+      provider = @service.user
+
+      unless provider.stripe_connected?
+        raise ActiveRecord::Rollback, "Prestataire non connecté à Stripe"
+      end
+
+      unless provider.subscription_status == "active"
+        raise ActiveRecord::Rollback, "Abonnement inactif"
+      end
+
       # 💳 Stripe Checkout
       session = Stripe::Checkout::Session.create(
         mode: "payment",
         line_items: [{
-          quantity: 1,
           price_data: {
             currency: "eur",
-            unit_amount: @booking.amount_cents,
-            product_data: {
-              name: @service.name
-            }
-          }
+            product_data: { name: @service.name },
+            unit_amount: @booking.amount_cents
+          },
+          quantity: 1
         }],
-        customer_email: @booking.customer_email,
-        success_url: success_service_booking_url(@service, @booking),
-        cancel_url: cancel_service_booking_url(@service, @booking),
-        metadata: {
-          booking_id: @booking.id
-        }
+        payment_intent_data: {
+          application_fee_amount: (@booking.amount_cents * 0.05).to_i
+        },
+        success_url: success_url,
+        cancel_url: cancel_url,
+        stripe_account: provider.stripe_account_id
       )
 
       @booking.update!(checkout_session_id: session.id)
-
       redirect_to session.url, allow_other_host: true
+
     end
   end
 

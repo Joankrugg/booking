@@ -1,5 +1,13 @@
 <h1 class="mb-4">Bienvenue <%= current_user.email %></h1>
-
+<% if current_user.stripe_connected? %>
+  <span class="badge bg-success">Paiements activés</span>
+<% else %>
+  <%= button_to "Connecter mon compte Stripe",
+      create_stripe_connect_path,
+      method: :post,
+      data: { turbo: false },
+      class: "btn btn-primary" %>
+<% end %>
 <div class="d-flex justify-content-between mb-3">
   <h2>Vos services</h2>
   <%= link_to "➕ Nouveau service", new_provider_service_path, class: "btn btn-primary" %>

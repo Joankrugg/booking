@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_01_182040) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_02_113143) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -129,6 +129,10 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_01_182040) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "admin", default: false, null: false
+    t.string "stripe_account_id"
+    t.boolean "stripe_connected", default: false
+    t.string "stripe_customer_id"
+    t.string "subscription_status"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end

@@ -75,6 +75,9 @@
         <% @slots_by_service.each do |service, slots| %>
           <% next if service.nil? %>
           <div class="activity-card" data-service>
+            <% unless service.publishable? %>
+              <span class="badge badge-soon">Bientôt disponible</span>
+            <% end %>
             <% if service.photo.attached? %>
               <%= image_tag service.photo, height: 132, width: 200, crop: :fill, class: "activity-img", alt: service.name %>
             <% else %>

@@ -14,5 +14,8 @@ class Service < ApplicationRecord
   validates :duration_minutes, numericality: true
 
   has_one_attached :photo 
+  def publishable?
+    user.stripe_connected? && user.subscription_status == "active"
+  end
 end
 

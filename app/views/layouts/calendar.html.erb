@@ -25,12 +25,30 @@
 
   <body>
     <%= render "shared/navbar" %>
+    <% if flash.any? %>
+      <div class="flash-container" id="flash-container">
+        <% flash.each do |type, message| %>
+          <div class="flash flash-<%= type %>">
+            <%= message %>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
 
 
 
     <!-- CONTENU CENTRÉ -->
 
     <%= yield %>
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const flash = document.getElementById("flash-container");
+      if (!flash) return;
 
+      setTimeout(() => {
+        flash.classList.add("flash-hidden");
+      }, 3000);
+    });
+  </script>
   </body>
 </html>

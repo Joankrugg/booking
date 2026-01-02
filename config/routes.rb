@@ -40,5 +40,14 @@ Rails.application.routes.draw do
   end
   resources :bookings, only: [:show]
   post "/webhooks/stripe", to: "webhooks#stripe"
+  post "/stripe/connect", to: "stripe_connect#create", as: :create_stripe_connect
+  get  "/stripe/connect/return", to: "stripe_connect#return", as: :return_stripe_connect
+  get  "/stripe/connect/refresh", to: "stripe_connect#refresh", as: :refresh_stripe_connect
+  get "/subscription/new", to: "subscriptions#new", as: :new_subscription
+  get "/subscription/success", to: "subscriptions#success", as: :subscription_success
+  post "/stripe/webhooks", to: "stripe_webhooks#create"
+
+
+
  
 end
