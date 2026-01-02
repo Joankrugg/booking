@@ -46,6 +46,21 @@
       <%= f.number_field :duration_minutes, step: 15, class: "form-control", required: true %>
     </div>
   </div>
+  <div class="mb-3">
+    <%= f.label :min_notice_days,
+          "Délai minimum avant réservation (en jours)",
+          class: "form-label fw-semibold" %>
+
+    <%= f.number_field :min_notice_days,
+          class: "form-control",
+          min: 0,
+          step: 1 %>
+
+    <div class="form-text">
+      Exemple : 2 = réservation possible à partir de J+2
+    </div>
+  </div>
+
   <div class="col-md-6 mb-3">
     <%= f.label :buffer_minutes, "Pause entre deux prestations (min)" %>
     <%= f.number_field :buffer_minutes,

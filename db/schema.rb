@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_01_02_113143) do
+ActiveRecord::Schema[8.0].define(version: 2026_01_02_203343) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "cube"
   enable_extension "earthdistance"
@@ -115,6 +115,7 @@ ActiveRecord::Schema[8.0].define(version: 2026_01_02_113143) do
     t.bigint "service_type_id", null: false
     t.bigint "category_id"
     t.integer "buffer_minutes", default: 0, null: false
+    t.integer "min_notice_days", default: 0, null: false
     t.index ["category_id"], name: "index_services_on_category_id"
     t.index ["service_type_id"], name: "index_services_on_service_type_id"
     t.index ["user_id"], name: "index_services_on_user_id"

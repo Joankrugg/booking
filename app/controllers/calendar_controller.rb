@@ -5,6 +5,7 @@ class CalendarController < ApplicationController
   end
 
   def index
+
     # ---- filtres
     @selected_categories = params[:categories]&.map(&:to_i) || []
     @location            = params[:location].to_s.strip.presence
@@ -30,6 +31,8 @@ class CalendarController < ApplicationController
     end
 
     services = services.distinct
+
+    services = services.select { |service| service.reservable_on?(@date) }
 
     # ---- DISPONIBILITÉS DU JOUR UNIQUEMENT
     day_slots = DayAvailability.new(@date, services: services).build

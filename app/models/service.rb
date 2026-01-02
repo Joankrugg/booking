@@ -17,5 +17,12 @@ class Service < ApplicationRecord
   def publishable?
     user.stripe_connected? && user.subscription_status == "active"
   end
+  def reservable_from
+    Date.today + min_notice_days
+  end
+
+  def reservable_on?(date)
+    date >= reservable_from
+  end
 end
 

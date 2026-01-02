@@ -19,7 +19,14 @@ class BookingsController < ApplicationController
                   alert: "Cette activité sera bientôt réservable."
       return
     end
-
+    unless @service.reservable_on?(booking_params[:start_time].to_date)
+      @booking = @service.bookings.new(booking_params)
+      @booking.errors.add(
+        :base,
+        "Ce service doit être réservé au minimum #{@service.min_notice_days} jour(s) à l’avance."
+      )
+      return render :new, status: :unprocessable_entity
+    end
     Booking.transaction do
       # 🔒 verrou pessimiste sur les bookings du service
       Booking.where(service_id: @service.id).lock(true)
