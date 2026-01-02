@@ -56,21 +56,25 @@ class BookingsController < ApplicationController
 
       # 💳 Stripe Checkout
       session = Stripe::Checkout::Session.create(
-        mode: "payment",
-        line_items: [{
-          price_data: {
-            currency: "eur",
-            product_data: { name: @service.name },
-            unit_amount: @booking.amount_cents
+        {
+          mode: "payment",
+          line_items: [{
+            price_data: {
+              currency: "eur",
+              product_data: { name: @service.name },
+              unit_amount: @booking.amount_cents
+            },
+            quantity: 1
+          }],
+          payment_intent_data: {
+            application_fee_amount: (@booking.amount_cents * 0.05).to_i
           },
-          quantity: 1
-        }],
-        payment_intent_data: {
-          application_fee_amount: (@booking.amount_cents * 0.05).to_i
+          success_url: success_service_booking_url(@service, @booking),
+          cancel_url: cancel_service_booking_url(@service, @booking)
         },
-        success_url: success_url,
-        cancel_url: cancel_url,
-        stripe_account: provider.stripe_account_id
+        {
+          stripe_account: @service.user.stripe_account_id
+        }
       )
 
       @booking.update!(checkout_session_id: session.id)

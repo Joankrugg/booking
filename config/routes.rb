@@ -45,6 +45,7 @@ Rails.application.routes.draw do
   get  "/stripe/connect/refresh", to: "stripe_connect#refresh", as: :refresh_stripe_connect
   get "/subscription/new", to: "subscriptions#new", as: :new_subscription
   get "/subscription/success", to: "subscriptions#success", as: :subscription_success
+  get "/provider/subscription/cancel", to: "subscriptions#cancel", as: :subscription_cancel
   post "/stripe/webhooks", to: "stripe_webhooks#create"
 
 

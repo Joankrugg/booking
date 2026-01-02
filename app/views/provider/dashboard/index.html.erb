@@ -8,6 +8,14 @@
       data: { turbo: false },
       class: "btn btn-primary" %>
 <% end %>
+<% if current_user.subscription_status != "active" %>
+  <%= link_to "S’abonner – 5 € / mois",
+        new_subscription_path,
+        data: { turbo: false },
+        class: "btn btn-primary" %>
+<% else %>
+  <span class="badge bg-success">Abonnement actif</span>
+<% end %>
 <div class="d-flex justify-content-between mb-3">
   <h2>Vos services</h2>
   <%= link_to "➕ Nouveau service", new_provider_service_path, class: "btn btn-primary" %>

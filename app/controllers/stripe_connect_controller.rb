@@ -2,7 +2,14 @@ class StripeConnectController < ApplicationController
   before_action :authenticate_user!
 
   def create
+    begin
     account = Stripe::Account.create(type: "standard")
+    rescue Stripe::StripeError => e
+      Rails.logger.error e.message
+      redirect_to provider_dashboard_path,
+                  alert: "Impossible de connecter Stripe pour le moment."
+      return
+    end
 
     current_user.update!(stripe_account_id: account.id)
 
@@ -27,7 +34,7 @@ class StripeConnectController < ApplicationController
       flash[:alert] = "Finalisez la configuration de votre compte Stripe"
     end
 
-    redirect_to provider_dashboard_path
+    redirect_to provider_root_path
   end
 
   def refresh
