@@ -10,21 +10,12 @@
   --card-radius: 16px;
 }
 
-
-.dropdown-menu {
-  z-index: 1050;
-}
-.calendar-hero {
-  overflow: visible;
-}
-
 /* =========================
    PAGE WRAPPER (CENTRAGE CLÉ)
 ========================= */
 
 .calendar-page {
   width: 100%;
-  margin-top: 50px;
   padding: 3rem 0;
   background: #fff;
 }
@@ -32,9 +23,17 @@
 /* Conteneur central unique */
 .calendar-shell {
   width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;          /* ← LE FIX */
-  padding: 0 1rem;         /* confort mobile */
+  margin: 0 auto;         
+}
+
+.calendar-top-hero {
+  min-height: 100vh;              /* plein écran */
+  width: 100%;
+  background-image: url("1.jpg");
+  background-size: cover;         /* remplit sans déformer */
+  background-position: center;
+  background-repeat: no-repeat;
+  position: relative;
 }
 
 .calendar-container {
@@ -56,12 +55,96 @@
 }
 
 /* =========================
-   HERO / TITRES
+   HERO 
 ========================= */
 
-..calendar-hero {
+.hero-banner {
+  min-height: 100vh;
   width: 100%;
-  background: #0d6efd;
+  background-image: url("1.jpg"); /* À changer */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+/* Overlay pour lisibilité */
+.hero-banner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 0;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  padding: 1rem;
+}
+
+.hero-content h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  opacity: 0.9;
+}
+
+.hero-cta {
+  display: inline-block;
+  margin-top: 2rem;
+  padding: 0.9rem 2rem;
+
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  text-decoration: none;
+
+  border: 2px solid white;
+  border-radius: 50px;
+  background: transparent;
+
+  transition: all 0.3s ease;
+}
+
+.hero-cta:hover {
+  background: white;
+  color: #000;
+  transform: translateY(-2px);
+}
+
+@keyframes bounce {
+  0% {
+    transform: rotate(45deg) translate(0, 0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: rotate(45deg) translate(8px, 8px);
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(45deg) translate(0, 0);
+    opacity: 0.4;
+  }
+}
+/* =========================
+   TITRES
+========================= */
+
+.calendar-hero {
+  width: 100%;
   padding: 4rem 0 3rem;
   color: white;
 }
@@ -74,6 +157,7 @@
 }
 
 .calendar-hero h1 {
+  color: #0d6efd;
   font-size: 2.4rem;
   font-weight: 600;
   max-width: 720px;
@@ -81,6 +165,7 @@
 }
 
 .calendar-hero p {
+  color: #0d6efd;
   max-width: 640px;
   margin: 0 auto 2rem;
   font-size: 1.05rem;

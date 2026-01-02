@@ -6,9 +6,15 @@
     <section class="calendar-hero">
       <div class="calendar-hero-inner">
         <h1>Trouver une activité</h1>
-        <p>Choisissez quoi, où et quand</p>
+        <p>Choisissez où, quoi et quand</p>
         <!-- FORM = FILTRES SERVEUR -->
-        <form method="get" action="<%= calendar_path %>" data-turbo="false">         
+        <form method="get" action="<%= calendar_path %>" data-turbo="false">  
+          <!-- Ville -->
+          <div class='row'> 
+            <div class="col-lg-6 mx-auto" style='padding-bottom: 30px;'>
+              <input id="location-input" name="location" type="text" value="<%= params[:location] %>" placeholder="Ville" class="form-control"/>
+            </div>
+          </div>       
           <!-- Catégories -->
           <div class="filters-chips">
             <% @categories.each do |category| %>
@@ -19,13 +25,7 @@
                 </label>
               </div>
             <% end %>
-          </div>
-          <!-- Ville -->
-          <div class='row'> 
-            <div class="col-lg-6 mx-auto" style='padding-bottom: 30px;'>
-              <input id="location-input" name="location" type="text" value="<%= params[:location] %>" placeholder="Ville" class="form-control"/>
-            </div>
-          </div>
+          </div>         
           <input type="hidden" name="date" value="<%= @date %>" id="date-input">
         </form>
       </div>

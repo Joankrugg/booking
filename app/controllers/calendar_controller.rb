@@ -1,6 +1,9 @@
 class CalendarController < ApplicationController
   layout "calendar"
 
+  def door
+  end
+
   def index
     # ---- filtres
     @selected_categories = params[:categories]&.map(&:to_i) || []
