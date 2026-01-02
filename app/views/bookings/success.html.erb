@@ -1,2 +1,49 @@
-<h1>🎉 Réservation confirmée !</h1>
-<p>Merci, votre réservation est bien enregistrée.</p>
+<div class="booking-success-page">
+  <div class="booking-success-card">
+    <div class="success-icon">✓</div>
+
+    <h1>Réservation confirmée</h1>
+    <p class="success-subtitle">
+      Merci <strong><%= @booking.customer_name %></strong>,  
+      votre réservation est bien enregistrée.
+    </p>
+
+    <div class="success-divider"></div>
+
+    <div class="booking-summary">
+      <div class="summary-row">
+        <span>Activité</span>
+        <strong><%= @booking.service.name %></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Date</span>
+        <strong><%= l(@booking.start_time.to_date, format: :long) %></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Horaire</span>
+        <strong>
+          <%= @booking.start_time.strftime("%H:%M") %> – 
+          <%= @booking.end_time.strftime("%H:%M") %>
+        </strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Montant</span>
+        <strong><%= @booking.amount_cents / 100 %> €</strong>
+      </div>
+    </div>
+
+    <div class="success-divider"></div>
+
+    <p class="success-note">
+      Un email de confirmation vous a été envoyé à  
+      <strong><%= @booking.customer_email %></strong>.
+    </p>
+
+    <div class="success-actions">
+      <%= link_to "Retour au catalogue", calendar_path, class: "btn-secondary" %>
+    </div>
+  </div>
+</div>

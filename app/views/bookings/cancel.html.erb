@@ -1,2 +1,43 @@
-<h1>Réservation annulée</h1>
-<p>Le paiement n'a pas été finalisé.</p>
+<div class="booking-cancel-page">
+  <div class="booking-cancel-card">
+    <div class="cancel-icon">✕</div>
+
+    <h1>Réservation annulée</h1>
+    <p class="cancel-subtitle">
+      Le paiement n’a pas été finalisé.  
+      Aucun montant n’a été débité.
+    </p>
+
+    <div class="cancel-divider"></div>
+
+    <div class="booking-summary">
+      <div class="summary-row">
+        <span>Activité</span>
+        <strong><%= @booking.service.name %></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Date prévue</span>
+        <strong><%= l(@booking.start_time.to_date, format: :long) %></strong>
+      </div>
+
+      <div class="summary-row">
+        <span>Horaire</span>
+        <strong>
+          <%= @booking.start_time.strftime("%H:%M") %> –
+          <%= @booking.end_time.strftime("%H:%M") %>
+        </strong>
+      </div>
+    </div>
+
+    <div class="cancel-divider"></div>
+
+    <p class="cancel-note">
+      Vous pouvez relancer une réservation à tout moment.
+    </p>
+
+    <div class="cancel-actions">
+      <%= link_to "Retour au catalogue", calendar_path, class: "btn-secondary" %>
+    </div>
+  </div>
+</div>

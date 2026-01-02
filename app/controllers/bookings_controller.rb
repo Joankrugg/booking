@@ -1,5 +1,5 @@
 class BookingsController < ApplicationController
-  layout 'calendar'
+  layout 'booking'
   def new
     @service = Service.find(params[:service_id])
 

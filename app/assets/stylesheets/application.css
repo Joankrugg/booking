@@ -3,11 +3,12 @@
 ========================= */
 
 :root {
-  --primary: #0d6efd;
-  --bg-light: #f8f9fa;
+  --primary: #1e7e34;          /* vert signature */
+  --primary-soft: #e6f4ea;     /* vert doux */
+  --bg-light: #f7f8fa;         /* gris clair premium */
+  --bg-neutral: #f1f3f5;
   --text-dark: #111;
-  --text-muted: #6c757d;
+  --text-muted: #6b7280;
   --card-radius: 16px;
+  --shadow-soft: 0 20px 40px rgba(0,0,0,0.08);
 }
-
-

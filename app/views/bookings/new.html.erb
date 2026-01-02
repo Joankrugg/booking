@@ -37,33 +37,47 @@
   <!-- =========================
        DATE & SLOTS
   ========================== -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <label class="form-label fw-semibold">
-        Choisir une date
+  <div class="booking-step mb-5">
+
+  <!-- =========================
+       STEP 1 – DATE
+  ========================== -->
+    <div class="booking-date mb-4">
+      <label for="booking-date" class="booking-date-label">
+        Choisissez une date
       </label>
 
       <input
         type="date"
         id="booking-date"
-        class="form-control shadow-sm"
+        class="form-control booking-date-input"
       >
     </div>
 
-    <div class="col-md-8">
-      <h4 class="fw-bold mb-3">
+    <!-- =========================
+         STEP 2 – SLOTS
+    ========================== -->
+    <div class="booking-slots">
+      <h2 class="booking-slots-title">
         Créneaux disponibles
-      </h4>
+      </h2>
 
-      <div
-        id="slots-container"
-        class="p-2 border rounded bg-light"
-      >
-        <div class="text-muted">
-          Sélectionnez une date
+      <div id="slots-container" class="booking-slots-container">
+        <div class="booking-slots-placeholder">
+          Sélectionnez une date pour voir les créneaux disponibles
         </div>
       </div>
+          <!-- SLOT SUMMARY -->
+      <div
+        id="selected-slot-summary"
+        class="alert alert-success fw-semibold"
+        style="display:none;"
+      >
+        Créneau sélectionné :
+        <span id="selected-slot-label"></span>
+      </div>
     </div>
+
   </div>
 
   <hr class="my-4">

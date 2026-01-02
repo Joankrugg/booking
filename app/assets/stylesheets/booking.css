@@ -1,0 +1,401 @@
+/* =========================================================
+   BOOKING PAGE – BASE
+========================================================= */
+
+.container.py-5 {
+  margin-top: 100px;
+  max-width: 960px;
+}
+
+
+/* =========================================================
+   SERVICE SUMMARY
+========================================================= */
+
+h1.fw-bold {
+  color: #111 !important;
+  font-size: 2rem;
+}
+
+.text-primary {
+  color: #1e7e34 !important; /* override bootstrap */
+}
+
+.text-muted {
+  color: #6b7280 !important;
+}
+
+.shadow-sm {
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08) !important;
+}
+
+img.rounded {
+  border-radius: 16px !important;
+}
+
+
+/* =========================================================
+   SEPARATORS
+========================================================= */
+
+hr {
+  border-color: #eee;
+}
+
+
+/* =========================================================
+   DATE & SLOTS
+========================================================= */
+
+.form-label {
+  font-size: 0.9rem;
+  color: #111;
+}
+
+.form-control {
+  border-radius: 12px;
+  border-color: #dcdfe4;
+}
+
+.form-control:focus {
+  border-color: #1e7e34;
+  box-shadow: 0 0 0 3px rgba(30,126,52,.15);
+}
+
+
+/* =========================================================
+   SLOTS CONTAINER
+========================================================= */
+
+#slots-container {
+  background: #f7f8fa !important;
+  border-color: #e5e7eb !important;
+  border-radius: 14px;
+  min-height: 60px;
+}
+
+
+/* =========================================================
+   SLOT BUTTONS
+========================================================= */
+
+/* override bootstrap */
+.btn-outline-primary {
+  border-radius: 999px;
+  border-color: #d1e7db !important;
+  color: #1e7e34 !important;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.85rem;
+}
+
+.btn-outline-primary:hover {
+  background: #e6f4ea !important;
+  border-color: #1e7e34 !important;
+  color: #1e7e34 !important;
+}
+
+/* selected slot */
+.btn-outline-primary.active {
+  background: #1e7e34 !important;
+  border-color: #1e7e34 !important;
+  color: #fff !important;
+  box-shadow: 0 4px 12px rgba(30,126,52,.25);
+}
+
+
+/* =========================================================
+   SELECTED SLOT SUMMARY
+========================================================= */
+
+.alert-success {
+  background: #e6f4ea !important;
+  color: #1e7e34 !important;
+  border: none;
+  border-radius: 14px;
+}
+
+
+/* =========================================================
+   ERRORS
+========================================================= */
+
+.alert-danger {
+  background: #f1f3f5;
+  color: #111;
+  border: none;
+  border-radius: 14px;
+}
+
+
+/* =========================================================
+   SUBMIT BUTTON
+========================================================= */
+
+/* override bootstrap */
+.btn-primary {
+  background: #1e7e34 !important;
+  border-color: #1e7e34 !important;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.btn-primary:hover {
+  background: #16692c !important;
+  border-color: #16692c !important;
+  box-shadow: 0 6px 18px rgba(30,126,52,.3);
+}
+
+.btn-lg {
+  padding: 0.7rem 1.6rem;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+  h1.fw-bold {
+    font-size: 1.6rem;
+  }
+
+  .container.py-5 {
+    padding-top: 2rem !important;
+  }
+}
+
+
+
+.booking-success-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f8fa 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.booking-success-card {
+  background: #ffffff;
+  max-width: 520px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.success-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #e6f4ea;
+  color: #1e7e34;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.booking-success-card h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.success-subtitle {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.success-divider {
+  height: 1px;
+  background: #eee;
+  margin: 24px 0;
+}
+
+.booking-summary {
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.summary-row span {
+  color: #777;
+}
+
+.summary-row strong {
+  font-weight: 600;
+}
+
+.success-note {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.success-actions {
+  margin-top: 28px;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 30px;
+  background: #111;
+  color: #fff;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: #000;
+}
+
+.booking-cancel-page {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f7f8fa 0%, #ffffff 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 16px;
+}
+
+.booking-cancel-card {
+  background: #ffffff;
+  max-width: 520px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 40px 36px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  text-align: center;
+}
+
+.cancel-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: #f1f1f1;
+  color: #333;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+  font-weight: 600;
+}
+
+.booking-cancel-card h1 {
+  font-size: 1.8rem;
+  margin-bottom: 10px;
+}
+
+.cancel-subtitle {
+  color: #555;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.cancel-divider {
+  height: 1px;
+  background: #eee;
+  margin: 24px 0;
+}
+
+.booking-summary {
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.summary-row span {
+  color: #777;
+}
+
+.summary-row strong {
+  font-weight: 600;
+}
+
+.cancel-note {
+  font-size: 0.85rem;
+  color: #666;
+}
+
+.cancel-actions {
+  margin-top: 28px;
+}
+
+.btn-secondary {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 30px;
+  background: #111;
+  color: #fff;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.btn-secondary:hover {
+  background: #000;
+}
+
+/* =========================
+   BOOKING STEPS
+========================= */
+
+.booking-step {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* DATE */
+.booking-date-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #9ca3af;
+  margin-bottom: 0.4rem;
+}
+
+.booking-date-input {
+  max-width: 240px;
+  font-size: 0.9rem;
+}
+
+/* SLOTS */
+.booking-slots-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111;
+  margin-bottom: 1rem;
+}
+
+.booking-slots-container {
+  border: 2px solid #1e7e34;
+  border-radius: 20px;
+  padding: 1.25rem;
+  margin-bottom: 20px;
+  min-height: 120px;
+  background: #fff;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+}
+
+.booking-slots-placeholder {
+  text-align: center;
+  color: #6b7280;
+  font-size: 0.95rem;
+  padding: 1.5rem 0;
+}
