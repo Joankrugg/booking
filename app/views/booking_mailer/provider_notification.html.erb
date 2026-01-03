@@ -1,0 +1,19 @@
+<h2>📅 Nouvelle réservation</h2>
+
+<p>Bonjour,</p>
+
+<p>Une nouvelle réservation vient d’être confirmée.</p>
+
+<hr>
+
+<p>
+  <strong>Prestation :</strong> <%= @service.name %><br>
+  <strong>Date :</strong> <%= l @booking.start_time, format: :long %><br>
+  <strong>Durée :</strong> <%= @service.duration_minutes %> min
+</p>
+
+<p>
+  <strong>Client :</strong><br>
+  <%= @booking.customer_name %><br>
+  <%= @booking.customer_email %>
+</p>

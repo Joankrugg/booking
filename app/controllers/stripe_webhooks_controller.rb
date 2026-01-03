@@ -34,6 +34,8 @@ class StripeWebhooksController < ApplicationController
     case event.type
     when "checkout.session.completed"
       handle_checkout_completed(event.data.object)
+      BookingMailer.customer_confirmation(booking).deliver_later
+      BookingMailer.provider_notification(booking).deliver_later
     else
       Rails.logger.info("Unhandled Stripe event: #{event.type}")
     end

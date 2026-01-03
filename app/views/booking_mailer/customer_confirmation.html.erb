@@ -1,0 +1,25 @@
+<h2>🎉 Réservation confirmée</h2>
+
+<p>Bonjour,</p>
+
+<p>
+  Votre réservation est bien confirmée.
+</p>
+
+<hr>
+
+<p>
+  <strong>Prestation :</strong> <%= @service.name %><br>
+  <strong>Date :</strong> <%= l @booking.start_time, format: :long %><br>
+  <strong>Durée :</strong> <%= @service.duration_minutes %> min<br>
+  <strong>Prix :</strong> <%= @service.price_euros %> €
+</p>
+
+<% if @service.description.present? %>
+  <p><%= @service.description %></p>
+<% end %>
+
+<p>
+  Merci pour votre confiance.<br>
+  À très bientôt.
+</p>
