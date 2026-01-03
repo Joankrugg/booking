@@ -37,7 +37,7 @@ gem "kamal", require: false
 # Add HTTP asset caching/compression and X-Sendfile acceleration to Puma [https://github.com/basecamp/thruster/]
 gem "thruster", require: false
 
-gem "cloudinary", "~> 1.29"
+gem "cloudinary", "~> 2.4"
 gem "activestorage-cloudinary-service"
 gem "geocoder"
 
