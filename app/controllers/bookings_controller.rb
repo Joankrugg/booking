@@ -1,3 +1,4 @@
+require "icalendar"
 class BookingsController < ApplicationController
   layout 'booking'
   def new
@@ -111,6 +112,29 @@ class BookingsController < ApplicationController
 
   def show
     @booking = Booking.find(params[:id])
+  end
+  
+  def calendar
+    booking = Booking.find(params[:id])
+    service = booking.service
+
+    cal = Icalendar::Calendar.new
+
+    cal.event do |e|
+      e.dtstart     = booking.start_time.utc
+      e.dtend       = booking.end_time.utc
+      e.summary     = service.name
+      e.description = service.description.presence || "Réservation confirmée"
+      e.location    = service.service_areas.first&.address
+      e.uid         = "booking-#{booking.id}@bookingapp"
+    end
+
+    cal.publish
+
+    send_data cal.to_ical,
+      type: "text/calendar",
+      disposition: "attachment",
+      filename: "reservation-#{booking.id}.ics"
   end
 
   private

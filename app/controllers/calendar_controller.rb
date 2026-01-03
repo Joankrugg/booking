@@ -9,7 +9,12 @@ class CalendarController < ApplicationController
     # ---- filtres
     @selected_categories = params[:categories]&.map(&:to_i) || []
     @location            = params[:location].to_s.strip.presence
-    @date                = params[:date]&.to_date || Date.today
+    @date =
+      begin
+        Date.parse(params[:date].to_s.delete('"'))
+      rescue ArgumentError
+        Date.today
+      end
 
     # ---- UI
     @categories = Category.order(:name)

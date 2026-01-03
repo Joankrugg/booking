@@ -41,6 +41,12 @@
       Un email de confirmation vous a été envoyé à  
       <strong><%= @booking.customer_email %></strong>.
     </p>
+    <div class="mt-4 text-center">
+      <%= link_to "📅 Ajouter à mon agenda",
+            calendar_booking_path(@booking),
+            class: "btn btn-outline-dark",
+            target: "_blank" %>
+    </div>
 
     <div class="success-actions">
       <%= link_to "Retour au catalogue", calendar_path, class: "btn-secondary" %>

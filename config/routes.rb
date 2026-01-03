@@ -41,7 +41,12 @@ Rails.application.routes.draw do
       end
     end
   end
-  resources :bookings, only: [:show]
+
+  resources :bookings, only: [:show] do
+    member do
+      get :calendar
+    end
+  end
   post "/webhooks/stripe", to: "webhooks#stripe"
   post "/stripe/connect", to: "stripe_connect#create", as: :create_stripe_connect
   get  "/stripe/connect/return", to: "stripe_connect#return", as: :return_stripe_connect
