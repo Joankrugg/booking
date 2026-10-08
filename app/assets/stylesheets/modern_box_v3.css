@@ -1,0 +1,18 @@
+/* Modern Box calendar editor: never confuse unknown and unavailable. */
+.availability-editor button.day { width: 100%; min-height: 3rem; margin: 0; padding: .4rem; border-radius: .5rem; }
+.availability-editor .state-unknown { background: #252525; color: #c8c8c8; border: 1px solid #666; }
+.availability-editor .state-available { background: #241611; color: #ffc1a6; border: 2px solid #f04c24; }
+.availability-editor .state-unavailable { background: #000; color: #fff; border: 2px solid #555; }
+.availability-editor .state-on_request { background: #2e2515; color: #ffe2a6; border: 2px dashed #e5b75d; }
+.availability-editor button:disabled { opacity: .35; cursor: not-allowed; }
+.calendar-paint { display: flex; flex-wrap: wrap; gap: 1rem; }
+.calendar-paint legend { margin-bottom: .6rem; }
+.calendar-paint input, .weekday-choice input { width: auto; margin-right: .5rem; }
+.weekday-choice { display: inline-flex; margin: .5rem 1rem .5rem 0; align-items: center; }
+details { margin: 1.5rem 0; }
+summary { cursor: pointer; font-weight: 600; padding: .6rem 0; }
+
+.form .calendar-paint input[type=radio] { width: auto; display: inline-block; padding: 0; }
+
+.availability-editor .day[data-past="false"]:disabled { opacity: .85; cursor: default; }
+.calendar-mode { position: sticky; top: 0; z-index: 2; }

@@ -1,0 +1,1 @@
+<h1>Les groupes</h1><p>Des projets indépendants, des contacts directs.</p><% if @groups.empty? %><p class="empty">Aucun groupe publié pour le moment.</p><% else %><div class="grid"><%= render partial: "card", collection: @groups, as: :group %></div><% end %>

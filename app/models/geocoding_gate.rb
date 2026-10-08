@@ -1,0 +1,2 @@
+class GeocodingGate < ApplicationRecord
+end

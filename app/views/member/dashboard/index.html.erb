@@ -1,0 +1,7 @@
+<h1>Mon espace</h1><p class="badge">Adhésion automatique · Accès gratuit à la plateforme</p>
+<div class="actions"><%= link_to "Modifier mon profil", edit_user_registration_path %></div>
+<% if current_user.uses_organizing? %><h2>Programmer un concert</h2><%= link_to "Rechercher des groupes disponibles", availabilities_path, class: "button" %><% end %>
+<% if current_user.uses_concerts? %><h2>Trouver où sortir</h2><%= link_to "Explorer les concerts", concerts_path, class: "button" %><% end %>
+<% if current_user.uses_groups? || current_user.admin? || @groups.any? %><h2>Mes groupes</h2><%= link_to "Ajouter un groupe", new_member_group_path, class: "button" %>
+<% if @groups.empty? %><p class="empty">Ajoutez votre premier groupe, puis publiez ses disponibilités et ses concerts.</p><% else %><div class="grid"><% @groups.each do |group| %><article class="card"><h3><%= group.name %></h3><p><%= group.visible? ? "Fiche publique" : "Brouillon / non publié" %></p><%= link_to "Gérer le groupe", member_group_path(group) %></article><% end %></div><% end %><% end %>
+<h2>Skills IA · Offre payante</h2><p><%= current_user.skill_access? ? "Votre accès Skills IA est actif." : "Découvrez les workflows disponibles et demandez un accès payant pour les télécharger." %></p><%= link_to "Découvrir les skills IA", skills_path, class: "button secondary" %>

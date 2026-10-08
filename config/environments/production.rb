@@ -72,7 +72,7 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_url_options = {
-    host: "slotbook.app",
+    host: ENV.fetch("APP_HOST", "modernboxrecords.org"),
     protocol: "https"
   }
 
