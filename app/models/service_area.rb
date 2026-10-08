@@ -3,5 +3,4 @@ class ServiceArea < ApplicationRecord
 
   geocoded_by :address
   validates :radius_km, presence: true
-
 end

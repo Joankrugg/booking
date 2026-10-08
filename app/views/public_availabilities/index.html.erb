@@ -1,0 +1,15 @@
+<h1>Trouver un groupe disponible</h1><p>Les prochaines disponibilités, avec ou sans date. Gratuit et sans compte.</p>
+<div class="actions"><%= link_to "Groupes à programmer", availabilities_path, class: "button secondary" %><%= link_to "Concerts où sortir", concerts_path, class: "button secondary" %></div>
+<%= form_with url: availabilities_path, method: :get, class: "filters" do |f| %>
+<div class="field"><%= f.label :area, "Autour de quelle ville ? (facultatif)" %><%= f.text_field :area, value: @place, placeholder: "Ex. Bordeaux", maxlength: 200 %></div>
+<div class="field"><%= f.label :radius, "Rayon de recherche (km)" %><%= f.number_field :radius, value: @radius, min: 0, max: 200 %></div>
+<div class="field"><%= f.label :date, "Date (facultative)" %><%= f.date_field :date, value: @date %></div><%= f.submit "Trouver des groupes" %><% end %>
+<% if @location_error %><p role="alert" class="empty"><%= @location_error %></p><% end %>
+<% if @date %><p><%= link_to "Voir toutes les prochaines dates", availabilities_path(area: @place, radius: @radius, month: @month) %></p><% end %>
+<details <%= "open" if @date %>><summary>Filtrer avec le calendrier</summary>
+<div class="actions"><%= link_to "Mois précédent", availabilities_path(month: @month.prev_month, date: @date, area: @place, radius: @radius) %><strong><%= l @month, format: "%B %Y" %></strong><%= link_to "Mois suivant", availabilities_path(month: @month.next_month, date: @date, area: @place, radius: @radius) %></div>
+<div class="calendar"><% %w[Dim Lun Mar Mer Jeu Ven Sam].each do |label| %><span class="weekday"><%= label %></span><% end %><% @month.wday.times do %><span aria-hidden="true"></span><% end %><% (@month..@month.end_of_month).each do |day| %><%= link_to day.day, availabilities_path(date: day, month: @month, area: @place, radius: @radius), class: ["day", ("available" if @available_days.include?(day)), ("selected" if day == @date)].compact.join(" "), aria: { label: "#{l(day)}#{' — résultat annoncé' if @available_days.include?(day)}" } %><% end %></div><p class="help">Les jours encadrés en orange comportent un résultat. Une date vide ne signifie pas qu’un groupe est indisponible.</p></details>
+<p class="help">La recherche croise le rayon autour du lieu recherché avec les zones de déplacement déclarées par les groupes. Les distances sont à vol d’oiseau.</p>
+<h2><%= @date ? l(@date, format: :long) : "Prochaines dates" %></h2>
+<% if @results.empty? %><p class="empty">Aucun résultat pour ces filtres. Effacez la date ou élargissez le lieu de recherche.</p><% else %><%= render partial: "result", collection: @results, as: :availability %><% end %>
+<div class="actions"><% if @page > 1 %><%= link_to "Résultats précédents", availabilities_path(page: @page - 1, date: @date, area: @place, radius: @radius, month: @month) %><% end %><% if @has_more %><%= link_to "Résultats suivants", availabilities_path(page: @page + 1, date: @date, area: @place, radius: @radius, month: @month) %><% end %></div>

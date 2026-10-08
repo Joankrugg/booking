@@ -1,6 +1,6 @@
 class Provider::AvailabilityExceptionsController < Provider::BaseController
   before_action :set_service
-  before_action :set_exception, only: [:edit, :update, :destroy]
+  before_action :set_exception, only: [ :edit, :update, :destroy ]
 
   def index
     @exceptions = @service.availability_exceptions.order(:date)

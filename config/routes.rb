@@ -1,62 +1,30 @@
 Rails.application.routes.draw do
-  devise_for :users, controllers: {
-    sessions: "users/sessions",
-    registrations: "users/registrations",
-    passwords: "users/passwords"
-  }
-  namespace :admin do
-    root "categories#index"
-    resources :categories
-    resources :services
-    resources :bookings, only: %i[index show]
-  end
-
-  # PUBLIC ROOT
-  root "calendar#door"
-  get "/calendar", to: "calendar#index"
-  get "/widgets/calendar", to: "widgets#calendar", as: :widgets_calendar
-
-
-  # PROVIDER ROOT (protégé)
-  namespace :provider do
+  devise_for :users, controllers: { sessions: "users/sessions", registrations: "users/registrations", passwords: "users/passwords" }
+  root "modern_box#index"
+  get "up", to: "rails/health#show"
+  get "calendar", to: "concerts#index", as: :calendar
+  get "disponibilites", to: "public_availabilities#index", as: :availabilities
+  resources :concerts, path: "concerts", only: [ :index ]
+  resources :groups, path: "groupes", only: [ :index, :show ]
+  resources :skills, only: [ :index, :show ]
+  get "skills/:skill_id/releases/:release_id/download", to: "skills#download", as: :skill_download_release
+  namespace :member, path: "membre" do
     root "dashboard#index"
-    resources :services do
-      resources :service_areas
-      resources :availability_rules
-      resources :availability_exceptions
-    end
-    resource :profile, only: [] do
-      patch :toggle_active
-    end
-  end
-
-  # PUBLIC SERVICES
-  resources :services, only: [:index, :show] do
-    get :availability, on: :member
-
-    resources :bookings, only: [:new, :create] do
-      member do
-        get :success
-        get :cancel
-      end
+    resources :groups, path: "groupes" do
+      resources :concerts, path: "concerts", only: [ :new, :create, :edit, :update, :destroy ]
+      get "calendrier-disponibilites", to: "availability_calendars#show", as: :availability_calendar
+      post "calendrier-disponibilites", to: "availability_calendars#update"
+      resources :concert_availabilities, path: "disponibilites", except: [ :show ]
+      resources :group_managers, path: "responsables", only: [ :create, :destroy ]
     end
   end
-
-  resources :bookings, only: [:show] do
-    member do
-      get :calendar
+  namespace :admin do
+    root "memberships#index"
+    resources :skill_accesses, only: [ :update ]
+    resources :memberships, only: [ :index ]
+    resources :skills do
+      resources :skill_releases, except: [ :show ]
     end
   end
-  post "/webhooks/stripe", to: "webhooks#stripe"
-  post "/stripe/connect", to: "stripe_connect#create", as: :create_stripe_connect
-  get  "/stripe/connect/return", to: "stripe_connect#return", as: :return_stripe_connect
-  get  "/stripe/connect/refresh", to: "stripe_connect#refresh", as: :refresh_stripe_connect
-  get "/subscription/new", to: "subscriptions#new", as: :new_subscription
-  get "/subscription/success", to: "subscriptions#success", as: :subscription_success
-  get "/provider/subscription/cancel", to: "subscriptions#cancel", as: :subscription_cancel
-  post "/stripe/webhooks", to: "stripe_webhooks#create"
-
-
-
- 
+  # Les anciens parcours réservation / Stripe ne sont pas exposés dans cette V1.
 end

@@ -1,20 +1,5 @@
-<div class="login-box">
-  <h2>Connexion</h2>
-
-  <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-
-    <div class="field">
-      <%= f.label :email %><br>
-      <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
-    </div>
-
-    <div class="field">
-      <%= f.label :password %><br>
-      <%= f.password_field :password, autocomplete: "current-password" %>
-    </div>
-
-    <button type="submit">Se connecter</button>
-
-  <% end %>
-</div>
-
+<h1>Connexion</h1><p>Retrouvez vos groupes et vos outils.</p>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+<%= f.label :email, "Adresse e-mail" %><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
+<%= f.label :password, "Mot de passe" %><%= f.password_field :password, autocomplete: "current-password", required: true %>
+<%= f.submit "Se connecter", class: "button" %><% end %><%= render "devise/shared/links" %>

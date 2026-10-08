@@ -1,9 +1,7 @@
-// Import and register all your controllers from the importmap via controllers/**/*_controller
 import { application } from "controllers/application"
-import { eagerLoadControllersFrom } from "@hotwired/stimulus-loading"
+import AvailabilityCalendarController from "controllers/availability_calendar_controller"
+application.register("availability-calendar", AvailabilityCalendarController)
 
-eagerLoadControllersFrom("controllers", application)
+import ProfileController from "controllers/profile_controller"
 
-import flatpickr from "flatpickr"
-
-application.register("flatpickr", FlatpickrController)
+application.register("profile", ProfileController)

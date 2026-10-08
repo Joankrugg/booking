@@ -1,5 +1,4 @@
 class Booking < ApplicationRecord
-
   after_initialize do
     self.status ||= "pending"
   end
@@ -19,4 +18,3 @@ class Booking < ApplicationRecord
       .exists?
   end
 end
-

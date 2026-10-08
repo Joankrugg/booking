@@ -1,0 +1,29 @@
+fr:
+  devise:
+    failure:
+      already_authenticated: "Vous êtes déjà connecté."
+      unauthenticated: "Connectez-vous pour accéder à cette page."
+      inactive: "Votre compte est désactivé."
+      invalid: "Adresse e-mail ou mot de passe incorrect."
+      not_found_in_database: "Adresse e-mail ou mot de passe incorrect."
+      timeout: "Votre session a expiré. Connectez-vous à nouveau."
+    sessions:
+      signed_in: "Vous êtes connecté."
+      signed_out: "Vous êtes déconnecté."
+      already_signed_out: "Vous êtes déconnecté."
+    registrations:
+      signed_up: "Votre compte est créé. Bienvenue dans votre espace Modern Box."
+      updated: "Votre compte a été mis à jour."
+      destroyed: "Votre compte a été supprimé."
+    passwords:
+      send_instructions: "Vous recevrez un lien de réinitialisation par e-mail."
+      send_paranoid_instructions: "Si ce compte existe, vous recevrez un lien de réinitialisation."
+      updated: "Votre mot de passe a été modifié."
+      updated_not_active: "Votre mot de passe a été modifié."
+  errors:
+    messages:
+      not_saved:
+        one: "Une erreur empêche l’enregistrement :"
+        other: "%{count} erreurs empêchent l’enregistrement :"
+      confirmation: "ne correspond pas à la confirmation"
+      too_short: "est trop court (minimum %{count} caractères)"

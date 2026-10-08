@@ -1,63 +1,24 @@
-# frozen_string_literal: true
-
 class Users::RegistrationsController < Devise::RegistrationsController
-  layout "login"
-  # before_action :configure_sign_up_params, only: [:create]
-  # before_action :configure_account_update_params, only: [:update]
-
-  # GET /resource/sign_up
-  # def new
-  #   super
-  # end
-
-  # POST /resource
-  # def create
-  #   super
-  # end
-
-  # GET /resource/edit
-  # def edit
-  #   super
-  # end
-
-  # PUT /resource
-  # def update
-  #   super
-  # end
-
-  # DELETE /resource
-  # def destroy
-  #   super
-  # end
-
-  # GET /resource/cancel
-  # Forces the session data which is usually expired after sign
-  # in to be expired now. This is useful if the user wants to
-  # cancel oauth signing in/up in the middle of the process,
-  # removing all OAuth session data.
-  # def cancel
-  #   super
-  # end
-
-  # protected
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_sign_up_params
-  #   devise_parameter_sanitizer.permit(:sign_up, keys: [:attribute])
-  # end
-
-  # If you have extra params to permit, append them to the sanitizer.
-  # def configure_account_update_params
-  #   devise_parameter_sanitizer.permit(:account_update, keys: [:attribute])
-  # end
-
-  # The path used after sign up.
-  # def after_sign_up_path_for(resource)
-  #   super(resource)
-  # end
-
-  # The path used after sign up for inactive accounts.
-  # def after_inactive_sign_up_path_for(resource)
-  #   super(resource)
-  # end
+  layout "modern_box"
+  before_action :configure_profile_params, only: [ :create, :update ]
+  def new
+    build_resource(profile_type: User::PROFILE_TYPES.values.include?(params[:profile]) ? params[:profile] : "audience")
+    resource.uses_groups = resource.profile_type == "artist"
+    resource.uses_organizing = resource.profile_type == "organizer"
+    resource.uses_concerts = resource.profile_type == "audience"
+    yield resource if block_given?
+    respond_with resource
+  end
+  protected
+  def configure_profile_params
+    fields = [ :usage_choices_submitted, :uses_groups, :uses_organizing, :uses_concerts, :organizer_type, :organization_name, :profile_details ]
+    devise_parameter_sanitizer.permit(:sign_up, keys: fields)
+    devise_parameter_sanitizer.permit(:account_update, keys: fields)
+  end
+  def after_sign_up_path_for(resource)
+    member_root_path
+  end
+  def after_update_path_for(resource)
+    member_root_path
+  end
 end

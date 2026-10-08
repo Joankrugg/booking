@@ -3,4 +3,3 @@ class Provider::DashboardController < Provider::BaseController
     @services = current_user.services
   end
 end
-

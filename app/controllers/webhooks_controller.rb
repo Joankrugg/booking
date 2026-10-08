@@ -28,6 +28,4 @@ class WebhooksController < ApplicationController
   rescue JSON::ParserError, Stripe::SignatureVerificationError
     render json: { error: "invalid" }, status: 400
   end
-  
-
 end

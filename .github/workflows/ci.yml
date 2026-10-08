@@ -90,7 +90,13 @@ jobs:
           RAILS_ENV: test
           DATABASE_URL: postgres://postgres:postgres@localhost:5432
           # REDIS_URL: redis://localhost:6379/0
-        run: bin/rails db:test:prepare test test:system
+        run: |
+          bin/rails db:prepare
+          bin/rails db:migrate
+          bin/rails test
+          bin/rails test:system
+          node test/javascript/availability_calendar_test.mjs
+          RAILS_ENV=production SECRET_KEY_BASE_DUMMY=1 bin/rails assets:precompile
 
       - name: Keep screenshots from failed system tests
         uses: actions/upload-artifact@v4

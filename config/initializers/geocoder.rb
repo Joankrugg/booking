@@ -1,8 +1,9 @@
 Geocoder.configure(
   timeout: 5,
-  lookup: :nominatim,
-  ip_lookup: :ipapi,
+  lookup: Rails.env.test? ? :test : ENV.fetch("GEOCODER_LOOKUP", "nominatim").to_sym,
+  api_key: ENV["GEOCODER_API_KEY"],
   use_https: true,
-  http_headers: { "User-Agent" => "booking-app" },
-  always_raise: [],
+  units: :km,
+  http_headers: { "User-Agent" => "ModernBox/3.0 (modernboxrecords@gmail.com)" },
+  always_raise: []
 )

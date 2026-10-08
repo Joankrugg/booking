@@ -5,10 +5,10 @@ class SubscriptionsController < ApplicationController
     session = Stripe::Checkout::Session.create(
       mode: "subscription",
       customer_email: current_user.email,
-      line_items: [{
+      line_items: [ {
         price: ENV["STRIPE_SUBSCRIPTION_PRICE_ID"],
         quantity: 1
-      }],
+      } ],
       success_url: subscription_success_url,
       cancel_url: provider_root_url
     )

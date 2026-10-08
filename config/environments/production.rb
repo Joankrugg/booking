@@ -47,7 +47,7 @@ Rails.application.configure do
   config.active_support.report_deprecations = false
 
   # Replace the default in-process memory cache store with a durable alternative.
-  
+
 
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
@@ -72,7 +72,7 @@ Rails.application.configure do
   }
 
   config.action_mailer.default_url_options = {
-    host: "slotbook.app",
+    host: ENV.fetch("APP_HOST", "modernboxrecords.org"),
     protocol: "https"
   }
 
