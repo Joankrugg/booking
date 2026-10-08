@@ -6,7 +6,7 @@ module PublicSearchFilters
     @month = (parse_day(params[:month]) || @date || Date.current).beginning_of_month
     @radius = params[:radius].present? ? params[:radius].to_i.clamp(0, 200) : 20
     @place = params[place_param].to_s.strip.first(200)
-    @page = [params[:page].to_i, 1].max
+    @page = [ params[:page].to_i, 1 ].max
   end
   def parse_day(value)
     return if value.blank?

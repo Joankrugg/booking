@@ -18,6 +18,6 @@ class AddProfilesAndConcerts < ActiveRecord::Migration[8.0]
       t.boolean :cancelled, null: false, default: false
       t.timestamps
     end
-    add_index :concerts, [:starts_at, :city_key, :published]
+    add_index :concerts, [ :starts_at, :city_key, :published ]
   end
 end

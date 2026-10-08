@@ -5,7 +5,7 @@ class ModernBoxAccessTest < ActionDispatch::IntegrationTest
   setup do
     @owner = User.create!(email: "owner@example.test", password: "secret-password", active: true)
     @member = User.create!(email: "member@example.test", password: "secret-password", active: true)
-    [@owner, @member].each { |u| u.update!(skills_access_until: Date.current + 30) }
+    [ @owner, @member ].each { |u| u.update!(skills_access_until: Date.current + 30) }
     @group = @owner.owned_groups.create!(name: "Vector test", contact_email: @owner.email, published: true)
     @skill = Skill.create!(name: "Audience", description: "Préparer un plan", compatibility: "Markdown", published: true)
     @release = @skill.skill_releases.create!(version: "1.0", instructions: "PRIVATE_SKILL_CONTENT")
@@ -79,7 +79,7 @@ class ModernBoxAccessTest < ActionDispatch::IntegrationTest
     assert_response :forbidden
   end
   test "public entry points and authentication forms render" do
-    [root_path, groups_path, group_path(@group), availabilities_path, skills_path, new_user_session_path, new_user_registration_path, new_user_password_path].each do |path|
+    [ root_path, groups_path, group_path(@group), availabilities_path, skills_path, new_user_session_path, new_user_registration_path, new_user_password_path ].each do |path|
       get path
       assert_response :success
     end
@@ -117,5 +117,4 @@ class ModernBoxAccessTest < ActionDispatch::IntegrationTest
     assert_not @member.reload.skill_access?
     assert @member.membership.active?
   end
-
 end

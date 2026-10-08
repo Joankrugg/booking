@@ -17,7 +17,7 @@ class PlaceResolver
       end
     end
     return unless allowed
-    result = Geocoder.search([query, country].reject(&:blank?).join(", ")).first
+    result = Geocoder.search([ query, country ].reject(&:blank?).join(", ")).first
     place = cached || GeocodedPlace.create_or_find_by!(query_key: key)
     coordinates = result&.coordinates
     valid = coordinates&.length == 2 && coordinates.all? { |value| value.is_a?(Numeric) && value.finite? } && coordinates[0].between?(-90, 90) && coordinates[1].between?(-180, 180)

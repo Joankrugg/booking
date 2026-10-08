@@ -1,6 +1,6 @@
 class Member::ConcertsController < Member::BaseController
   before_action :set_group
-  before_action :set_concert, only: [:edit, :update, :destroy]
+  before_action :set_concert, only: [ :edit, :update, :destroy ]
   def new
     @concert = @group.concerts.new(starts_at: Date.current.tomorrow.in_time_zone.change(hour: 20))
   end

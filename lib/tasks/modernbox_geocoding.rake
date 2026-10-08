@@ -2,9 +2,9 @@ namespace :modern_box do
   desc "Localiser les concerts et disponibilités existants sans coordonnées (requêtes espacées)"
   task geocode_existing: :environment do
     count = 0
-    [ConcertAvailability, Concert].each do |model|
+    [ ConcertAvailability, Concert ].each do |model|
       model.where(latitude: nil).find_each do |record|
-        query = record.is_a?(Concert) ? [record.address, record.city].reject(&:blank?).join(", ") : record.area_name
+        query = record.is_a?(Concert) ? [ record.address, record.city ].reject(&:blank?).join(", ") : record.area_name
         place = PlaceResolver.resolve(query)
         if place&.located?
           record.update_columns(latitude: place.latitude, longitude: place.longitude)

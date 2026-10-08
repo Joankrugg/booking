@@ -6,7 +6,7 @@ class ConcertAvailability < ApplicationRecord
   before_validation :normalize_area
   validates :date, :area_name, :area_key, :confirmed_at, presence: true
   validates :status, inclusion: { in: STATUSES.values }
-  validates :area_key, uniqueness: { scope: [:group_id, :date] }
+  validates :area_key, uniqueness: { scope: [ :group_id, :date ] }
   validates :travel_radius_km, numericality: { only_integer: true, greater_than_or_equal_to: 0, less_than_or_equal_to: 1000 }
   validate :valid_time_window
   validates :area_name, length: { maximum: 200 }

@@ -3,7 +3,7 @@ class GeographicSearch
   def self.filter(records, place, radius, touring: false)
     return records.none unless place&.located?
     max_radius = radius + (touring ? 1000 : 0)
-    box = Geocoder::Calculations.bounding_box([place.latitude, place.longitude], max_radius, units: :km)
+    box = Geocoder::Calculations.bounding_box([ place.latitude, place.longitude ], max_radius, units: :km)
     table = records.klass.quoted_table_name
     candidates = records.where(Geocoder::Sql.within_bounding_box(*box, "#{table}.latitude", "#{table}.longitude"))
     if records.klass.connection.adapter_name == "PostgreSQL"
@@ -16,7 +16,7 @@ class GeographicSearch
     # approximation. No arbitrary candidate cap that could silently hide results.
     ids = []
     candidates.find_each do |record|
-      distance = Geocoder::Calculations.distance_between([place.latitude, place.longitude], [record.latitude, record.longitude], units: :km)
+      distance = Geocoder::Calculations.distance_between([ place.latitude, place.longitude ], [ record.latitude, record.longitude ], units: :km)
       ids << record.id if distance <= radius + (touring ? record.travel_radius_km : 0)
     end
     records.where(id: ids)

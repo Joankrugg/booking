@@ -1,7 +1,7 @@
 # app/controllers/services_controller.rb
 class ServicesController < ApplicationController
   def index
-    @services = Service.all  
+    @services = Service.all
   end
 
   def show
@@ -45,6 +45,4 @@ class ServicesController < ApplicationController
     @service = Service.find(params[:service_id])
     @booking = @service.bookings.find(params[:id])
   end
-
 end
-

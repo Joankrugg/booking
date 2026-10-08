@@ -7,7 +7,7 @@ class Member::AvailabilityCalendarsController < Member::BaseController
     prepare_calendar
     return undo_change if params[:undo_token].present?
     dates = if params[:single_date].present?
-      [Date.iso8601(params[:single_date])]
+      [ Date.iso8601(params[:single_date]) ]
     elsif params[:mode] == "period"
       first = Date.iso8601(params[:from].to_s)
       last = Date.iso8601(params[:to].to_s)
@@ -20,7 +20,7 @@ class Member::AvailabilityCalendarsController < Member::BaseController
     attributes = params.permit(:area_name, :travel_radius_km, :starts_at_time, :ends_at_time, :public_note).to_h
     attributes.except!("starts_at_time", "ends_at_time", "public_note") unless params[:replace_details] == "1"
     action = params[:paint].to_s
-    raise AvailabilityBatch::Invalid, "Choisissez un état." unless (ConcertAvailability::STATUSES.values + ["clear"]).include?(action)
+    raise AvailabilityBatch::Invalid, "Choisissez un état." unless (ConcertAvailability::STATUSES.values + [ "clear" ]).include?(action)
     attributes[:status] = action unless action == "clear"
     previous = current = nil
     @group.with_lock do
@@ -48,7 +48,7 @@ class Member::AvailabilityCalendarsController < Member::BaseController
   end
   private
   def undo_change
-    data = Rails.application.message_verifier(:calendar_undo).verified(params[:undo_token])
+    data = Rails.application.message_verifier(:calendar_undo).verified(params[:undo_token])&.with_indifferent_access
     raise AvailabilityBatch::Invalid, "L’annulation a expiré." unless data && data[:user_id] == current_user.id && data[:group_id] == @group.id
     raise AvailabilityBatch::Invalid, "Une date passée ne peut pas être modifiée." if Date.iso8601(data[:date]) < Date.current
     @group.with_lock do

@@ -6,10 +6,10 @@ class AddFlexibleProfilesAndGeography < ActiveRecord::Migration[8.0]
     execute "UPDATE users SET uses_groups = TRUE WHERE profile_type = 'artist'"
     execute "UPDATE users SET uses_organizing = TRUE WHERE profile_type = 'organizer'"
     execute "UPDATE users SET uses_concerts = TRUE WHERE profile_type = 'audience'"
-    [:concerts, :concert_availabilities].each do |table|
+    [ :concerts, :concert_availabilities ].each do |table|
       add_column table, :latitude, :float
       add_column table, :longitude, :float
-      add_index table, [:latitude, :longitude]
+      add_index table, [ :latitude, :longitude ]
     end
     add_column :concert_availabilities, :travel_radius_km, :integer, default: 50, null: false
     # Old named zones have no declared radius: do not invent one on upgrade.
@@ -33,11 +33,11 @@ class AddFlexibleProfilesAndGeography < ActiveRecord::Migration[8.0]
   def down
     drop_table :geocoding_gates
     drop_table :geocoded_places
-    [:concerts, :concert_availabilities].each do |table|
+    [ :concerts, :concert_availabilities ].each do |table|
       remove_column table, :latitude
       remove_column table, :longitude
     end
-    [:travel_radius_km, :starts_at_time, :ends_at_time].each { |column| remove_column :concert_availabilities, column }
-    [:uses_groups, :uses_organizing, :uses_concerts].each { |column| remove_column :users, column }
+    [ :travel_radius_km, :starts_at_time, :ends_at_time ].each { |column| remove_column :concert_availabilities, column }
+    [ :uses_groups, :uses_organizing, :uses_concerts ].each { |column| remove_column :users, column }
   end
 end

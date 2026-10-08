@@ -5,7 +5,6 @@ class CalendarController < ApplicationController
   end
 
   def index
-
     # ---- filtres
     @selected_categories = params[:categories]&.map(&:to_i) || []
     @location            = params[:location].to_s.strip.presence

@@ -8,7 +8,7 @@ namespace :modern_box do
   desc "Create draft groups for the three known projects (OWNER_EMAIL required)"
   task drafts: :environment do
     owner = User.find_by!(email: ENV.fetch("OWNER_EMAIL").strip.downcase)
-    [["Deftoons", "[Genre à compléter]", 4], ["Schmok", "[Genre à compléter]", 5], ["Vector", "[Genre à compléter]", 2]].each do |name, genre, count|
+    [ [ "Deftoons", "[Genre à compléter]", 4 ], [ "Schmok", "[Genre à compléter]", 5 ], [ "Vector", "[Genre à compléter]", 2 ] ].each do |name, genre, count|
       owner.owned_groups.find_or_create_by!(name: name) do |group|
         group.genre = genre
         group.member_count = count

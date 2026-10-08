@@ -13,7 +13,7 @@ class Service < ApplicationRecord
   validates :price_euros, numericality: true
   validates :duration_minutes, numericality: true
 
-  has_one_attached :photo 
+  has_one_attached :photo
   def publishable?
     user.stripe_connected? && user.subscription_status == "active"
   end
@@ -30,4 +30,3 @@ class Service < ApplicationRecord
     active && user.active?
   end
 end
-

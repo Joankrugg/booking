@@ -1,5 +1,5 @@
 class Member::GroupsController < Member::BaseController
-  before_action :set_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_group, only: [ :show, :edit, :update, :destroy ]
   def index
     redirect_to member_root_path
   end

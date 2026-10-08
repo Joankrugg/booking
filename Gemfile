@@ -60,7 +60,6 @@ group :development, :test do
   gem "rubocop-rails-omakase", require: false
 
   gem "dotenv-rails"
-
 end
 
 group :development do
@@ -75,4 +74,3 @@ group :test do
 end
 
 gem "devise", "~> 4.9"
-

@@ -56,5 +56,4 @@ class User < ApplicationRecord
   def active?
     active
   end
-
 end

@@ -1,6 +1,6 @@
 class Admin::SkillReleasesController < Admin::BaseController
   before_action :set_skill
-  before_action :set_release, only: [:edit, :update, :destroy]
+  before_action :set_release, only: [ :edit, :update, :destroy ]
   def index
     @releases = @skill.skill_releases.order(created_at: :desc)
   end

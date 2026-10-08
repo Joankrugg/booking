@@ -1,7 +1,7 @@
 class SkillsController < ApplicationController
   layout "modern_box"
-  before_action :authenticate_user!, only: [:download]
-  before_action :require_skill_access!, only: [:download]
+  before_action :authenticate_user!, only: [ :download ]
+  before_action :require_skill_access!, only: [ :download ]
   def index
     @skills = Skill.published.order(:name)
   end

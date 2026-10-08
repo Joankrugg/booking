@@ -81,7 +81,7 @@ class DayAvailability
       end
 
       start_time += step
-    end
+      end
 
     slots
   end

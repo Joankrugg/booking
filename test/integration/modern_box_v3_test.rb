@@ -22,7 +22,7 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, "V3 band"
     assert_includes response.body, "Prochaines dates"
-    assert_select 'input[name=date][required]', count: 0
+    assert_select "input[name=date][required]", count: 0
     get availabilities_path(date: @day + 1)
     assert_not_includes response.body, "V3 band"
   end
@@ -30,7 +30,7 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
     availability(date: Date.current + 80)
     get availabilities_path(month: Date.current.next_month)
     assert_includes response.body, "V3 band"
-    assert_select 'input[name=date][value]', count: 0
+    assert_select "input[name=date][value]", count: 0
   end
   test "concert proximity includes Floirac and Merignac but excludes Paris" do
     concert("Floirac", "Floirac live")
@@ -68,7 +68,7 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
     sign_in @owner, scope: :user
     get member_group_availability_calendar_path(@group, month: @day)
     assert_response :success
-    assert_select 'button.state-unknown'
+    assert_select "button.state-unknown"
     calendar_update
     assert_redirected_to member_group_availability_calendar_path(@group, month: @day.beginning_of_month, area_name: "Bordeaux", travel_radius_km: 30)
     record = @group.concert_availabilities.sole
@@ -97,14 +97,14 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
     first = Date.current + 7
     last = first + 20
     expected = (first..last).select(&:friday?)
-    payload = { mode: "period", single_date: nil, from: first, to: last, weekdays: ["5"] }
+    payload = { mode: "period", single_date: nil, from: first, to: last, weekdays: [ "5" ] }
     2.times { calendar_update(payload) }
     assert_response :redirect
     assert_equal expected, @group.concert_availabilities.order(:date).pluck(:date)
   end
   test "invalid large reversed past or empty periods never write partial dates" do
     sign_in @owner, scope: :user
-    [ { from: @day, to: @day + 400, weekdays: ["5"] }, { from: @day, to: @day - 1, weekdays: ["5"] }, { from: Date.current - 1, to: @day, weekdays: %w[0 1 2 3 4 5 6] }, { from: @day, to: @day + 3, weekdays: [] } ].each do |range|
+    [ { from: @day, to: @day + 400, weekdays: [ "5" ] }, { from: @day, to: @day - 1, weekdays: [ "5" ] }, { from: Date.current - 1, to: @day, weekdays: %w[0 1 2 3 4 5 6] }, { from: @day, to: @day + 3, weekdays: [] } ].each do |range|
       calendar_update(range.merge(mode: "period", single_date: nil))
       assert_response :unprocessable_entity
       assert_equal 0, @group.concert_availabilities.count
@@ -120,7 +120,7 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
     sign_in @owner, scope: :user
     @owner.membership.update!(status: "revoked")
     calendar_update
-    assert_response :success
+    assert_response :redirect
     assert_equal 1, @group.concert_availabilities.count
   end
   test "one account can be both organizer and artist with both dashboard paths" do
@@ -157,13 +157,12 @@ class ModernBoxV3Test < ActionDispatch::IntegrationTest
   test "pagination does not remove future dates or let suspended owners leak" do
     52.times { |i| availability(date: Date.current + i + 1) }
     get availabilities_path
-    assert_select 'article.card', count: 50
+    assert_select "article.card", count: 50
     assert_includes response.body, "Résultats suivants"
     get availabilities_path(page: 2)
-    assert_select 'article.card', count: 2
+    assert_select "article.card", count: 2
     @owner.update!(active: false)
     get availabilities_path(page: 2)
-    assert_select 'article.card', count: 0
+    assert_select "article.card", count: 0
   end
-
 end

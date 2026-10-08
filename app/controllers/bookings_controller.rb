@@ -1,6 +1,6 @@
 require "icalendar"
 class BookingsController < ApplicationController
-  layout 'booking'
+  layout "booking"
   def new
     @service = Service.find(params[:service_id])
 
@@ -11,7 +11,6 @@ class BookingsController < ApplicationController
   end
 
   def create
-
     @service = Service.find(params[:service_id])
     provider = @service.user
 
@@ -74,14 +73,14 @@ class BookingsController < ApplicationController
       session = Stripe::Checkout::Session.create(
         {
           mode: "payment",
-          line_items: [{
+          line_items: [ {
             price_data: {
               currency: "eur",
               product_data: { name: @service.name },
               unit_amount: @booking.amount_cents
             },
             quantity: 1
-          }],
+          } ],
           payment_intent_data: {
             application_fee_amount: (@booking.amount_cents * 0.05).to_i
           },
@@ -95,7 +94,6 @@ class BookingsController < ApplicationController
 
       @booking.update!(checkout_session_id: session.id)
       redirect_to session.url, allow_other_host: true
-
     end
   end
 
@@ -113,7 +111,7 @@ class BookingsController < ApplicationController
   def show
     @booking = Booking.find(params[:id])
   end
-  
+
   def calendar
     booking = Booking.find(params[:id])
     service = booking.service

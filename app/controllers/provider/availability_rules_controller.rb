@@ -1,6 +1,6 @@
 class Provider::AvailabilityRulesController < Provider::BaseController
   before_action :set_service
-  before_action :set_rule, only: [:edit, :update, :destroy]
+  before_action :set_rule, only: [ :edit, :update, :destroy ]
 
   def index
     @rules = @service.availability_rules.order(:weekday, :start_time)
@@ -68,6 +68,4 @@ class Provider::AvailabilityRulesController < Provider::BaseController
   def rule_params
     params.require(:availability_rule).permit(:start_time, :end_time, weekdays: [])
   end
-
 end
-

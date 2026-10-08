@@ -27,7 +27,7 @@ class CreateModernBoxCore < ActiveRecord::Migration[8.0]
       t.references :user, null: false, foreign_key: true
       t.timestamps
     end
-    add_index :group_managers, [:group_id, :user_id], unique: true
+    add_index :group_managers, [ :group_id, :user_id ], unique: true
     create_table :concert_availabilities do |t|
       t.references :group, null: false, foreign_key: true
       t.references :confirmed_by, null: false, foreign_key: { to_table: :users }
@@ -39,8 +39,8 @@ class CreateModernBoxCore < ActiveRecord::Migration[8.0]
       t.datetime :confirmed_at, null: false
       t.timestamps
     end
-    add_index :concert_availabilities, [:group_id, :date, :area_key], unique: true, name: "idx_concert_area_unique"
-    add_index :concert_availabilities, [:date, :area_key, :status], name: "idx_concert_search"
+    add_index :concert_availabilities, [ :group_id, :date, :area_key ], unique: true, name: "idx_concert_area_unique"
+    add_index :concert_availabilities, [ :date, :area_key, :status ], name: "idx_concert_search"
     create_table :skills do |t|
       t.string :name, null: false
       t.text :description, null: false
@@ -55,6 +55,6 @@ class CreateModernBoxCore < ActiveRecord::Migration[8.0]
       t.text :changelog
       t.timestamps
     end
-    add_index :skill_releases, [:skill_id, :version], unique: true
+    add_index :skill_releases, [ :skill_id, :version ], unique: true
   end
 end

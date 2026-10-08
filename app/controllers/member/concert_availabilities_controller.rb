@@ -1,6 +1,6 @@
 class Member::ConcertAvailabilitiesController < Member::BaseController
   before_action :set_group
-  before_action :set_availability, only: [:edit, :update, :destroy]
+  before_action :set_availability, only: [ :edit, :update, :destroy ]
   def index
     redirect_to member_group_path(@group)
   end

@@ -9,7 +9,7 @@ class ModernBoxV3CoreTest < ActiveSupport::TestCase
     day = Date.current + 10
     record = @group.concert_availabilities.create!(date: day, area_name: "Bordeaux", confirmed_by: @owner, confirmed_at: Time.current)
     assert_raises(AvailabilityBatch::Invalid) do
-      AvailabilityBatch.apply(group: @group, user: @owner, dates: [day, day + 1], attributes: { area_name: "Bordeaux", travel_radius_km: 50, status: "unavailable", starts_at_time: "23:00", ends_at_time: "20:00" })
+      AvailabilityBatch.apply(group: @group, user: @owner, dates: [ day, day + 1 ], attributes: { area_name: "Bordeaux", travel_radius_km: 50, status: "unavailable", starts_at_time: "23:00", ends_at_time: "20:00" })
     end
     assert_equal "available", record.reload.status
     assert_equal 1, @group.concert_availabilities.count
@@ -28,7 +28,7 @@ class ModernBoxV3CoreTest < ActiveSupport::TestCase
     assert_nil GeocodingGate.find(1).requested_at
   end
   test "uncached lookup resolves once and repeated queries reuse the cache" do
-    Geocoder::Lookup::Test.add_stub("Nantes, France", [{ "coordinates" => [47.2184, -1.5536] }])
+    Geocoder::Lookup::Test.add_stub("Nantes, France", [ { "coordinates" => [ 47.2184, -1.5536 ] } ])
     first = PlaceResolver.resolve("Nantes")
     assert first.located?
     assert_equal first.id, PlaceResolver.resolve("nantes").id
@@ -70,9 +70,8 @@ class ModernBoxV3CoreTest < ActiveSupport::TestCase
     far = @group.concert_availabilities.create!(date: day, area_name: "Paris", travel_radius_km: 10, confirmed_by: @owner, confirmed_at: Time.current)
     place = PlaceResolver.resolve("Bordeaux")
     relation = connection.stub(:adapter_name, "PostgreSQL") { GeographicSearch.filter(ConcertAvailability.all, place, 0, touring: true) }
-    assert_equal [near.id], relation.pluck(:id)
+    assert_equal [ near.id ], relation.pluck(:id)
     far.update!(travel_radius_km: 600)
-    assert_equal [near.id, far.id].sort, relation.pluck(:id).sort
+    assert_equal [ near.id, far.id ].sort, relation.pluck(:id).sort
   end
-
 end

@@ -11,7 +11,7 @@ class Concert < ApplicationRecord
   scope :publicly_visible, -> { joins(:group).merge(Group.publicly_visible).where(published: true) }
   private
   def location_query
-    [address, city].reject(&:blank?).join(", ")
+    [ address, city ].reject(&:blank?).join(", ")
   end
   def location_changed?
     will_save_change_to_city? || will_save_change_to_address?
