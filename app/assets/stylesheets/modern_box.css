@@ -13,3 +13,25 @@
 .availability-editor .day:disabled { cursor: default; }
 .availability-editor .day[data-past="false"]:disabled { opacity: .85; }
 .calendar-step [hidden] { display: none; }
+
+/* Shared spacing for authentication, member forms and content actions. */
+:root { --space-label: .5rem; --space-field: 1.5rem; --space-action: 1.75rem; }
+.form { width: 100%; }
+.form .field { margin: 0 0 var(--space-field); }
+.form .field > label { margin-bottom: var(--space-label); }
+.form .field .help { margin: .5rem 0 0; }
+.form > .actions { margin: var(--space-action) 0 0; gap: .75rem; }
+.form .field + .actions { margin-top: var(--space-action); }
+.form .profile-options { margin: 0 0 2rem; }
+.form .profile-choice { margin: 0 0 .75rem; }
+.form > section { margin-bottom: 2rem; }
+.auth-links { display: flex; flex-wrap: wrap; gap: .75rem 1.5rem; margin-top: 1.5rem; }
+.auth-links p { margin: 0; }
+.card > p { margin: .75rem 0; }
+.card > .button { margin-top: .75rem; }
+.card > .actions { margin: 1.25rem 0 0; }
+.form .filters .field, .filters .field { margin: 0; }
+@media(max-width:550px) {
+  .form > .actions > input[type=submit], .form > .actions > .button { width: 100%; text-align: center; }
+  .filters > input[type=submit] { margin-top: .5rem; }
+}
