@@ -1,12 +1,12 @@
 <div class="login-box">
   <h2>Mon compte</h2>
 
-  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, data: { controller: "profile" } }) do |f| %>
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form auth-form", method: :put, data: { controller: "profile" } }) do |f| %>
     <%= render "devise/shared/error_messages", resource: resource %>
 <%= render "profile_fields", f: f %>
 
     <div class="field">
-      <%= f.label :email %><br />
+      <%= f.label :email %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     </div>
 
@@ -15,21 +15,21 @@
     <% end %>
 
     <div class="field">
-      <%= f.label :password %> <i>(laisser vide pour conserver votre mot de passe)</i><br />
+      <%= f.label :password %> <i>(laisser vide pour conserver votre mot de passe)</i>
       <%= f.password_field :password, autocomplete: "new-password" %>
       <% if @minimum_password_length %>
-        <br />
+        
         <em><%= @minimum_password_length %> caractères minimum</em>
       <% end %>
     </div>
 
     <div class="field">
-      <%= f.label :password_confirmation %><br />
+      <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
     </div>
 
     <div class="field">
-      <%= f.label :current_password %> <i>(votre mot de passe actuel est nécessaire)</i><br />
+      <%= f.label :current_password %> <i>(votre mot de passe actuel est nécessaire)</i>
       <%= f.password_field :current_password, autocomplete: "current-password" %>
     </div>
 

@@ -1,5 +1,5 @@
 <h1>Connexion</h1><p>Retrouvez vos groupes et vos outils.</p>
-<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-<%= f.label :email, "Adresse e-mail" %><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
-<%= f.label :password, "Mot de passe" %><%= f.password_field :password, autocomplete: "current-password", required: true %>
-<%= f.submit "Se connecter", class: "button" %><% end %><%= render "devise/shared/links" %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name), html: { class: "form auth-form" }) do |f| %>
+<div class="field"><%= f.label :email, "Adresse e-mail" %><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %></div>
+<div class="field"><%= f.label :password, "Mot de passe" %><%= f.password_field :password, autocomplete: "current-password", required: true %></div>
+<div class="actions"><%= f.submit "Se connecter", class: "button" %></div><% end %><div class="auth-links"><%= render "devise/shared/links" %></div>

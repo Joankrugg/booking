@@ -1,8 +1,8 @@
 <h1>Créer mon compte</h1><p>Choisissez vos usages. Votre adhésion est automatique et gratuite : votre espace est accessible immédiatement. Seuls les skills IA sont payants.</p>
-<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { data: { controller: "profile" } }) do |f| %>
+<%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { class: "form auth-form", data: { controller: "profile" } }) do |f| %>
 <%= render "devise/shared/error_messages", resource: resource %>
 <%= render "profile_fields", f: f %>
-<%= f.label :email, "Adresse e-mail" %><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %>
-<%= f.label :password, "Mot de passe (#{@minimum_password_length} caractères minimum)" %><%= f.password_field :password, autocomplete: "new-password", required: true %>
-<%= f.label :password_confirmation, "Confirmer le mot de passe" %><%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %>
-<%= f.submit "Créer mon compte", class: "button" %><% end %><%= render "devise/shared/links" %>
+<div class="field"><%= f.label :email, "Adresse e-mail" %><%= f.email_field :email, autofocus: true, autocomplete: "email", required: true %></div>
+<div class="field"><%= f.label :password, "Mot de passe (#{@minimum_password_length} caractères minimum)" %><%= f.password_field :password, autocomplete: "new-password", required: true %></div>
+<div class="field"><%= f.label :password_confirmation, "Confirmer le mot de passe" %><%= f.password_field :password_confirmation, autocomplete: "new-password", required: true %></div>
+<div class="actions"><%= f.submit "Créer mon compte", class: "button" %></div><% end %><div class="auth-links"><%= render "devise/shared/links" %></div>
